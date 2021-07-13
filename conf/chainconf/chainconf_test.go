@@ -18,3 +18,4 @@ func TestGenesis(t *testing.T) {
 	require.Nil(t, err)
 	fmt.Println(genesis)
 }
+
