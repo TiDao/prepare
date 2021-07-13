@@ -9,124 +9,125 @@ package localconf
 
 import (
 	"chainmaker.org/chainmaker-go/logger"
+	"gopkg.in/yaml.v2"
 )
 
 type nodeConfig struct {
-	Type            string       `mapstructure:"type"`
-	CertFile        string       `mapstructure:"cert_file"`
-	PrivKeyFile     string       `mapstructure:"priv_key_file"`
-	PrivKeyPassword string       `mapstructure:"priv_key_password"`
-	AuthType        string       `mapstructure:"auth_type"`
-	P11Config       pkcs11Config `mapstructure:"pkcs11"`
-	NodeId          string       `mapstructure:"node_id"`
-	OrgId           string       `mapstructure:"org_id"`
-	SignerCacheSize int          `mapstructure:"signer_cache_size"`
-	CertCacheSize   int          `mapstructure:"cert_cache_size"`
+	Type            string       `yaml:"type"`
+	CertFile        string       `yaml:"cert_file"`
+	PrivKeyFile     string       `yaml:"priv_key_file"`
+	PrivKeyPassword string       `yaml:"priv_key_password"`
+	AuthType        string       `yaml:"auth_type"`
+	P11Config       pkcs11Config `yaml:"pkcs11"`
+	NodeId          string       `yaml:"node_id"`
+	OrgId           string       `yaml:"org_id"`
+	SignerCacheSize int          `yaml:"signer_cache_size"`
+	CertCacheSize   int          `yaml:"cert_cache_size"`
 }
 
 type netConfig struct {
-	Provider                string            `mapstructure:"provider"`
-	ListenAddr              string            `mapstructure:"listen_addr"`
-	PeerStreamPoolSize      int               `mapstructure:"peer_stream_pool_size"`
-	MaxPeerCountAllow       int               `mapstructure:"max_peer_count_allow"`
-	PeerEliminationStrategy int               `mapstructure:"peer_elimination_strategy"`
-	Seeds                   []string          `mapstructure:"seeds"`
-	TLSConfig               netTlsConfig      `mapstructure:"tls"`
-	BlackList               blackList         `mapstructure:"blacklist"`
-	CustomChainTrustRoots   []chainTrustRoots `mapstructure:"custom_chain_trust_roots"`
+	Provider                string            `yaml:"provider"`
+	ListenAddr              string            `yaml:"listen_addr"`
+	PeerStreamPoolSize      int               `yaml:"peer_stream_pool_size"`
+	MaxPeerCountAllow       int               `yaml:"max_peer_count_allow"`
+	PeerEliminationStrategy int               `yaml:"peer_elimination_strategy"`
+	Seeds                   []string          `yaml:"seeds"`
+	TLSConfig               netTlsConfig      `yaml:"tls"`
+	BlackList               blackList         `yaml:"blacklist"`
+	CustomChainTrustRoots   []chainTrustRoots `yaml:"custom_chain_trust_roots"`
 }
 
 type netTlsConfig struct {
-	Enabled     bool   `mapstructure:"enabled"`
-	PrivKeyFile string `mapstructure:"priv_key_file"`
-	CertFile    string `mapstructure:"cert_file"`
+	Enabled     bool   `yaml:"enabled"`
+	PrivKeyFile string `yaml:"priv_key_file"`
+	CertFile    string `yaml:"cert_file"`
 }
 
 type pkcs11Config struct {
-	Enabled          bool   `mapstructure:"enabled"`
-	Library          string `mapstructure:"library"`
-	Label            string `mapstructure:"label"`
-	Password         string `mapstructure:"password"`
-	SessionCacheSize int    `mapstructure:"session_cache_size"`
-	Hash             string `mapstructure:"hash"`
+	Enabled          bool   `yaml:"enabled"`
+	Library          string `yaml:"library"`
+	Label            string `yaml:"label"`
+	Password         string `yaml:"password"`
+	SessionCacheSize int    `yaml:"session_cache_size"`
+	Hash             string `yaml:"hash"`
 }
 
 type blackList struct {
-	Addresses []string `mapstructure:"addresses"`
-	NodeIds   []string `mapstructure:"node_ids"`
+	Addresses []string `yaml:"addresses"`
+	NodeIds   []string `yaml:"node_ids"`
 }
 
 type chainTrustRoots struct {
-	ChainId    string       `mapstructure:"chain_id"`
-	TrustRoots []trustRoots `mapstructure:"trust_roots"`
+	ChainId    string       `yaml:"chain_id"`
+	TrustRoots []trustRoots `yaml:"trust_roots"`
 }
 
 type trustRoots struct {
-	OrgId string `mapstructure:"org_id"`
-	Root  string `mapstructure:"root"`
+	OrgId string `yaml:"org_id"`
+	Root  string `yaml:"root"`
 }
 
 type rpcConfig struct {
-	Provider                               string           `mapstructure:"provider"`
-	Port                                   int              `mapstructure:"port"`
-	TLSConfig                              tlsConfig        `mapstructure:"tls"`
-	RateLimitConfig                        rateLimitConfig  `mapstructure:"ratelimit"`
-	SubscriberConfig                       subscriberConfig `mapstructure:"subscriber"`
-	CheckChainConfTrustRootsChangeInterval int              `mapstructure:"check_chain_conf_trust_roots_change_interval"`
+	Provider                               string           `yaml:"provider"`
+	Port                                   int              `yaml:"port"`
+	TLSConfig                              tlsConfig        `yaml:"tls"`
+	RateLimitConfig                        rateLimitConfig  `yaml:"ratelimit"`
+	SubscriberConfig                       subscriberConfig `yaml:"subscriber"`
+	CheckChainConfTrustRootsChangeInterval int              `yaml:"check_chain_conf_trust_roots_change_interval"`
 }
 
 type tlsConfig struct {
-	Mode                  string `mapstructure:"mode"`
-	PrivKeyFile           string `mapstructure:"priv_key_file"`
-	CertFile              string `mapstructure:"cert_file"`
-	TestClientPrivKeyFile string `mapstructure:"test_client_priv_key_file"`
-	TestClientCertFile    string `mapstructure:"test_client_cert_file"`
+	Mode                  string `yaml:"mode"`
+	PrivKeyFile           string `yaml:"priv_key_file"`
+	CertFile              string `yaml:"cert_file"`
+	TestClientPrivKeyFile string `yaml:"test_client_priv_key_file"`
+	TestClientCertFile    string `yaml:"test_client_cert_file"`
 }
 
 type rateLimitConfig struct {
-	TokenPerSecond  int `mapstructure:"token_per_second"`
-	TokenBucketSize int `mapstructure:"token_bucket_size"`
+	TokenPerSecond  int `yaml:"token_per_second"`
+	TokenBucketSize int `yaml:"token_bucket_size"`
 }
 
 type subscriberConfig struct {
-	RateLimitConfig rateLimitConfig `mapstructure:"ratelimit"`
+	RateLimitConfig rateLimitConfig `yaml:"ratelimit"`
 }
 
 type debugConfig struct {
-	IsCliOpen           bool `mapstructure:"is_cli_open"`
-	IsHttpOpen          bool `mapstructure:"is_http_open"`
-	IsProposer          bool `mapstructure:"is_proposer"`
-	IsNotRWSetCheck     bool `mapstructure:"is_not_rwset_check"`
-	IsConcurPropose     bool `mapstructure:"is_concur_propose"`
-	IsConcurVerify      bool `mapstructure:"is_concur_verify"`
-	IsSolo              bool `mapstructure:"is_solo"`
-	IsHaltPropose       bool `mapstructure:"is_halt_propose"`
-	IsSkipAccessControl bool `mapstructure:"is_skip_access_control"` // true: minimize access control; false: use full access control
-	IsTraceMemoryUsage  bool `mapstructure:"is_trace_memory_usage"`  // true for trace memory usage information periodically
+	IsCliOpen           bool `yaml:"is_cli_open"`
+	IsHttpOpen          bool `yaml:"is_http_open"`
+	IsProposer          bool `yaml:"is_proposer"`
+	IsNotRWSetCheck     bool `yaml:"is_not_rwset_check"`
+	IsConcurPropose     bool `yaml:"is_concur_propose"`
+	IsConcurVerify      bool `yaml:"is_concur_verify"`
+	IsSolo              bool `yaml:"is_solo"`
+	IsHaltPropose       bool `yaml:"is_halt_propose"`
+	IsSkipAccessControl bool `yaml:"is_skip_access_control"` // true: minimize access control; false: use full access control
+	IsTraceMemoryUsage  bool `yaml:"is_trace_memory_usage"`  // true for trace memory usage information periodically
 
-	IsProposeDuplicately          bool `mapstructure:"is_propose_duplicately"`           // Simulate a node which would propose duplicate after it has proposed Proposal
-	IsProposeMultiNodeDuplicately bool `mapstructure:"is_propose_multinode_duplicately"` // Simulate a malicious node which would propose duplicate proposals
-	IsProposalOldHeight           bool `mapstructure:"is_proposal_old_height"`
-	IsPrevoteDuplicately          bool `mapstructure:"is_prevote_duplicately"`   // Simulate a malicious node which would prevote duplicately
-	IsPrevoteOldHeight            bool `mapstructure:"is_prevote_old_height"`    // Simulate a malicious node which would prevote for oldheight
-	IsPrevoteLost                 bool `mapstructure:"is_prevote_lost"`          //prevote vote lost
-	IsPrecommitDuplicately        bool `mapstructure:"is_precommit_duplicately"` //Simulate a malicious node which would propose duplicate precommits
-	IsPrecommitOldHeight          bool `mapstructure:"is_precommit_old_height"`  // Simulate a malicious node which would Precommit a lower height than current height
+	IsProposeDuplicately          bool `yaml:"is_propose_duplicately"`           // Simulate a node which would propose duplicate after it has proposed Proposal
+	IsProposeMultiNodeDuplicately bool `yaml:"is_propose_multinode_duplicately"` // Simulate a malicious node which would propose duplicate proposals
+	IsProposalOldHeight           bool `yaml:"is_proposal_old_height"`
+	IsPrevoteDuplicately          bool `yaml:"is_prevote_duplicately"`   // Simulate a malicious node which would prevote duplicately
+	IsPrevoteOldHeight            bool `yaml:"is_prevote_old_height"`    // Simulate a malicious node which would prevote for oldheight
+	IsPrevoteLost                 bool `yaml:"is_prevote_lost"`          //prevote vote lost
+	IsPrecommitDuplicately        bool `yaml:"is_precommit_duplicately"` //Simulate a malicious node which would propose duplicate precommits
+	IsPrecommitOldHeight          bool `yaml:"is_precommit_old_height"`  // Simulate a malicious node which would Precommit a lower height than current height
 
-	IsProposeLost    bool `mapstructure:"is_propose_lost"`     //proposal vote lost
-	IsProposeDelay   bool `mapstructure:"is_propose_delay"`    //proposal lost
-	IsPrevoteDelay   bool `mapstructure:"is_prevote_delay"`    //network problem resulting in preovote lost
-	IsPrecommitLost  bool `mapstructure:"is_precommit_lost"`   //precommit vote lost
-	IsPrecommitDelay bool `mapstructure:"is_prevcommit_delay"` //network problem resulting in precommit lost
+	IsProposeLost    bool `yaml:"is_propose_lost"`     //proposal vote lost
+	IsProposeDelay   bool `yaml:"is_propose_delay"`    //proposal lost
+	IsPrevoteDelay   bool `yaml:"is_prevote_delay"`    //network problem resulting in preovote lost
+	IsPrecommitLost  bool `yaml:"is_precommit_lost"`   //precommit vote lost
+	IsPrecommitDelay bool `yaml:"is_prevcommit_delay"` //network problem resulting in precommit lost
 
-	IsCommitWithoutPublish bool `mapstructure:"is_commit_without_publish"` //if the node committing block without publishing, TRUE；else, FALSE
-	IsPrevoteInvalid       bool `mapstructure:"is_prevote_invalid"`        //simulate a node which sends an invalid prevote(hash=nil)
-	IsPrecommitInvalid     bool `mapstructure:"is_precommit_invalid"`      //simulate a node which sends an invalid precommit(hash=nil)
+	IsCommitWithoutPublish bool `yaml:"is_commit_without_publish"` //if the node committing block without publishing, TRUE；else, FALSE
+	IsPrevoteInvalid       bool `yaml:"is_prevote_invalid"`        //simulate a node which sends an invalid prevote(hash=nil)
+	IsPrecommitInvalid     bool `yaml:"is_precommit_invalid"`      //simulate a node which sends an invalid precommit(hash=nil)
 
-	IsModifyTxPayload    bool `mapstructure:"is_modify_tx_payload"`
-	IsExtreme            bool `mapstructure:"is_extreme"` //extreme fast mode
-	UseNetMsgCompression bool `mapstructure:"use_net_msg_compression"`
-	IsNetInsecurity      bool `mapstructure:"is_net_insecurity"`
+	IsModifyTxPayload    bool `yaml:"is_modify_tx_payload"`
+	IsExtreme            bool `yaml:"is_extreme"` //extreme fast mode
+	UseNetMsgCompression bool `yaml:"use_net_msg_compression"`
+	IsNetInsecurity      bool `yaml:"is_net_insecurity"`
 }
 
 type blockchainConfig struct {
@@ -136,23 +137,23 @@ type blockchainConfig struct {
 
 type StorageConfig struct {
 	//默认的Leveldb配置，如果每个DB有不同的设置，可以在自己的DB中进行设置
-	StorePath            string `mapstructure:"store_path"`
-	DbPrefix             string `mapstructure:"db_prefix"`
-	WriteBufferSize      int    `mapstructure:"write_buffer_size"`
-	BloomFilterBits      int    `mapstructure:"bloom_filter_bits"`
-	BlockWriteBufferSize int    `mapstructure:"block_write_buffer_size"`
+	StorePath            string `yaml:"store_path"`
+	DbPrefix             string `yaml:"db_prefix"`
+	WriteBufferSize      int    `yaml:"write_buffer_size"`
+	BloomFilterBits      int    `yaml:"bloom_filter_bits"`
+	BlockWriteBufferSize int    `yaml:"block_write_buffer_size"`
 	//数据库模式：light只存区块头,normal存储区块头和交易以及生成的State,full存储了区块头、交易、状态和交易收据（读写集、日志等）
-	//Mode string `mapstructure:"mode"`
-	DisableHistoryDB       bool      `mapstructure:"disable_historydb"`
-	DisableResultDB        bool      `mapstructure:"disable_resultdb"`
-	DisableContractEventDB bool      `mapstructure:"disable_contract_eventdb"`
-	LogDBWriteAsync        bool      `mapstructure:"logdb_write_async"`
-	BlockDbConfig          *DbConfig `mapstructure:"blockdb_config"`
-	StateDbConfig          *DbConfig `mapstructure:"statedb_config"`
-	HistoryDbConfig        *DbConfig `mapstructure:"historydb_config"`
-	ResultDbConfig         *DbConfig `mapstructure:"resultdb_config"`
-	ContractEventDbConfig  *DbConfig `mapstructure:"contract_eventdb_config"`
-	UnArchiveBlockHeight   uint64    `mapstructure:"unarchive_block_height"`
+	//Mode string `yaml:"mode"`
+	DisableHistoryDB       bool      `yaml:"disable_historydb"`
+	DisableResultDB        bool      `yaml:"disable_resultdb"`
+	DisableContractEventDB bool      `yaml:"disable_contract_eventdb"`
+	LogDBWriteAsync        bool      `yaml:"logdb_write_async"`
+	BlockDbConfig          *DbConfig `yaml:"blockdb_config"`
+	StateDbConfig          *DbConfig `yaml:"statedb_config"`
+	HistoryDbConfig        *DbConfig `yaml:"historydb_config"`
+	ResultDbConfig         *DbConfig `yaml:"resultdb_config"`
+	ContractEventDbConfig  *DbConfig `yaml:"contract_eventdb_config"`
+	UnArchiveBlockHeight   uint64    `yaml:"unarchive_block_height"`
 }
 
 func (config *StorageConfig) setDefault() {
@@ -239,9 +240,9 @@ func (config *StorageConfig) GetActiveDBCount() int {
 
 type DbConfig struct {
 	//leveldb,rocksdb,sql
-	Provider      string         `mapstructure:"provider"`
-	LevelDbConfig *LevelDbConfig `mapstructure:"leveldb_config"`
-	SqlDbConfig   *SqlDbConfig   `mapstructure:"sqldb_config"`
+	Provider      string         `yaml:"provider"`
+	LevelDbConfig *LevelDbConfig `yaml:"leveldb_config"`
+	SqlDbConfig   *SqlDbConfig   `yaml:"sqldb_config"`
 }
 
 const DbConfig_Provider_Sql = "sql"
@@ -256,116 +257,144 @@ func (dbc *DbConfig) IsSqlDB() bool {
 }
 
 type LevelDbConfig struct {
-	StorePath            string `mapstructure:"store_path"`
-	WriteBufferSize      int    `mapstructure:"write_buffer_size"`
-	BloomFilterBits      int    `mapstructure:"bloom_filter_bits"`
-	BlockWriteBufferSize int    `mapstructure:"block_write_buffer_size"`
+	StorePath            string `yaml:"store_path"`
+	WriteBufferSize      int    `yaml:"write_buffer_size"`
+	BloomFilterBits      int    `yaml:"bloom_filter_bits"`
+	BlockWriteBufferSize int    `yaml:"block_write_buffer_size"`
 }
 type SqlDbConfig struct {
 	//mysql, sqlite, postgres, sqlserver
-	SqlDbType       string `mapstructure:"sqldb_type"`
-	Dsn             string `mapstructure:"dsn"`
-	MaxIdleConns    int    `mapstructure:"max_idle_conns"`
-	MaxOpenConns    int    `mapstructure:"max_open_conns"`
-	ConnMaxLifeTime int    `mapstructure:"conn_max_lifetime"` //second
-	SqlLogMode      string `mapstructure:"sqllog_mode"`       //Silent,Error,Warn,Info
-	SqlVerifier     string `mapstructure:"sql_verifier"`      //simple,safe
-	DbPrefix        string `mapstructure:"db_prefix"`
+	SqlDbType       string `yaml:"sqldb_type"`
+	Dsn             string `yaml:"dsn"`
+	MaxIdleConns    int    `yaml:"max_idle_conns"`
+	MaxOpenConns    int    `yaml:"max_open_conns"`
+	ConnMaxLifeTime int    `yaml:"conn_max_lifetime"` //second
+	SqlLogMode      string `yaml:"sqllog_mode"`       //Silent,Error,Warn,Info
+	SqlVerifier     string `yaml:"sql_verifier"`      //simple,safe
+	DbPrefix        string `yaml:"db_prefix"`
 }
 
 const SqlDbConfig_SqlDbType_MySQL = "mysql"
 const SqlDbConfig_SqlDbType_Sqlite = "sqlite"
 
 type txPoolConfig struct {
-	PoolType            string `mapstructure:"pool_type"`
-	MaxTxPoolSize       uint32 `mapstructure:"max_txpool_size"`
-	MaxConfigTxPoolSize uint32 `mapstructure:"max_config_txpool_size"`
-	IsMetrics           bool   `mapstructure:"is_metrics"`
-	Performance         bool   `mapstructure:"performance"`
-	BatchMaxSize        int    `mapstructure:"batch_max_size"`
-	BatchCreateTimeout  int64  `mapstructure:"batch_create_timeout"`
-	CacheFlushTicker    int64  `mapstructure:"cache_flush_ticker"`
-	CacheThresholdCount int64  `mapstructure:"cache_threshold_count"`
-	CacheFlushTimeOut   int64  `mapstructure:"cache_flush_timeout"`
-	AddTxChannelSize    int64  `mapstructure:"add_tx_channel_size"`
+	PoolType            string `yaml:"pool_type"`
+	MaxTxPoolSize       uint32 `yaml:"max_txpool_size"`
+	MaxConfigTxPoolSize uint32 `yaml:"max_config_txpool_size"`
+	IsMetrics           bool   `yaml:"is_metrics"`
+	Performance         bool   `yaml:"performance"`
+	BatchMaxSize        int    `yaml:"batch_max_size"`
+	BatchCreateTimeout  int64  `yaml:"batch_create_timeout"`
+	CacheFlushTicker    int64  `yaml:"cache_flush_ticker"`
+	CacheThresholdCount int64  `yaml:"cache_threshold_count"`
+	CacheFlushTimeOut   int64  `yaml:"cache_flush_timeout"`
+	AddTxChannelSize    int64  `yaml:"add_tx_channel_size"`
 }
 
 type syncConfig struct {
-	BroadcastTime             uint32  `mapstructure:"broadcast_time"`
-	BlockPoolSize             uint32  `mapstructure:"block_pool_size"`
-	WaitTimeOfBlockRequestMsg uint32  `mapstructure:"wait_time_requested"`
-	BatchSizeFromOneNode      uint32  `mapstructure:"batch_Size_from_one_node"`
-	ProcessBlockTick          float64 `mapstructure:"process_block_tick"`
-	NodeStatusTick            float64 `mapstructure:"node_status_tick"`
-	LivenessTick              float64 `mapstructure:"liveness_tick"`
-	SchedulerTick             float64 `mapstructure:"scheduler_tick"`
-	ReqTimeThreshold          float64 `mapstructure:"req_time_threshold"`
-	DataDetectionTick         float64 `mapstructure:"data_detection_tick"`
+	BroadcastTime             uint32  `yaml:"broadcast_time"`
+	BlockPoolSize             uint32  `yaml:"block_pool_size"`
+	WaitTimeOfBlockRequestMsg uint32  `yaml:"wait_time_requested"`
+	BatchSizeFromOneNode      uint32  `yaml:"batch_Size_from_one_node"`
+	ProcessBlockTick          float64 `yaml:"process_block_tick"`
+	NodeStatusTick            float64 `yaml:"node_status_tick"`
+	LivenessTick              float64 `yaml:"liveness_tick"`
+	SchedulerTick             float64 `yaml:"scheduler_tick"`
+	ReqTimeThreshold          float64 `yaml:"req_time_threshold"`
+	DataDetectionTick         float64 `yaml:"data_detection_tick"`
 }
 
 type spvConfig struct {
-	RefreshReqCacheMills     int64 `mapstructure:"refresh_reqcache_mils"`
-	MessageCacheSize         int64 `mapstructure:"message_cahche_size"`
-	ReSyncCheckIntervalMills int64 `mapstructure:"resync_check_interval_mils"`
-	SyncTimeoutMills         int64 `mapstructure:"sync_timeout_mils"`
-	ReqSyncBlockNum          int64 `mapstructure:"reqsync_blocknum"`
-	MaxReqSyncBlockNum       int64 `mapstructure:"max_reqsync_blocknum"`
-	PeerActiveTime           int64 `mapstructure:"peer_active_time"`
+	RefreshReqCacheMills     int64 `yaml:"refresh_reqcache_mils"`
+	MessageCacheSize         int64 `yaml:"message_cahche_size"`
+	ReSyncCheckIntervalMills int64 `yaml:"resync_check_interval_mils"`
+	SyncTimeoutMills         int64 `yaml:"sync_timeout_mils"`
+	ReqSyncBlockNum          int64 `yaml:"reqsync_blocknum"`
+	MaxReqSyncBlockNum       int64 `yaml:"max_reqsync_blocknum"`
+	PeerActiveTime           int64 `yaml:"peer_active_time"`
 }
 
 type monitorConfig struct {
-	Enabled bool `mapstructure:"enabled"`
-	Port    int  `mapstructure:"port"`
+	Enabled bool `yaml:"enabled"`
+	Port    int  `yaml:"port"`
 }
 
 type pprofConfig struct {
-	Enabled bool `mapstructure:"enabled"`
-	Port    int  `mapstructure:"port"`
+	Enabled bool `yaml:"enabled"`
+	Port    int  `yaml:"port"`
 }
 
 type redisConfig struct {
-	Url          string `mapstructure:"url"`
-	Auth         string `mapstructure:"auth"`
-	DB           int    `mapstructure:"db"`
-	MaxIdle      int    `mapstructure:"max_idle"`
-	MaxActive    int    `mapstructure:"max_active"`
-	IdleTimeout  int    `mapstructure:"idle_timeout"`
-	CacheTimeout int    `mapstructure:"cache_timeout"`
+	Url          string `yaml:"url"`
+	Auth         string `yaml:"auth"`
+	DB           int    `yaml:"db"`
+	MaxIdle      int    `yaml:"max_idle"`
+	MaxActive    int    `yaml:"max_active"`
+	IdleTimeout  int    `yaml:"idle_timeout"`
+	CacheTimeout int    `yaml:"cache_timeout"`
 }
 
 type clientConfig struct {
-	OrgId           string `mapstructure:"org_id"`
-	UserKeyFilePath string `mapstructure:"user_key_file_path"`
-	UserCrtFilePath string `mapstructure:"user_crt_file_path"`
-	HashType        string `mapstructure:"hash_type"`
+	OrgId           string `yaml:"org_id"`
+	UserKeyFilePath string `yaml:"user_key_file_path"`
+	UserCrtFilePath string `yaml:"user_crt_file_path"`
+	HashType        string `yaml:"hash_type"`
 }
 
 type schedulerConfig struct {
-	RWSetLog bool `mapstructure:"rwset_log"`
+	RWSetLog bool `yaml:"rwset_log"`
 }
 
 type coreConfig struct {
-	Evidence bool `mapstructure:"evidence"`
+	Evidence bool `yaml:"evidence"`
 }
 
 // CMConfig - Local config struct
 type CMConfig struct {
-	LogConfig        logger.LogConfig   `mapstructure:"log"`
-	NetConfig        netConfig          `mapstructure:"net"`
-	NodeConfig       nodeConfig         `mapstructure:"node"`
-	RpcConfig        rpcConfig          `mapstructure:"rpc"`
-	BlockChainConfig []blockchainConfig `mapstructure:"blockchain"`
-	StorageConfig    StorageConfig      `mapstructure:"storage"`
-	TxPoolConfig     txPoolConfig       `mapstructure:"txpool"`
-	SyncConfig       syncConfig         `mapstructure:"sync"`
-	SpvConfig        spvConfig          `mapstructure:"spv"`
+	LogConfig        logger.LogConfig   `yaml:"log"`
+	NetConfig        netConfig          `yaml:"net"`
+	NodeConfig       nodeConfig         `yaml:"node"`
+	RpcConfig        rpcConfig          `yaml:"rpc"`
+	BlockChainConfig []blockchainConfig `yaml:"blockchain"`
+	StorageConfig    StorageConfig      `yaml:"storage"`
+	TxPoolConfig     txPoolConfig       `yaml:"txpool"`
+	SyncConfig       syncConfig         `yaml:"sync"`
+	SpvConfig        spvConfig          `yaml:"spv"`
 
 	// 开发调试使用
-	DebugConfig     debugConfig     `mapstructure:"debug"`
-	PProfConfig     pprofConfig     `mapstructure:"pprof"`
-	MonitorConfig   monitorConfig   `mapstructure:"monitor"`
-	CoreConfig      coreConfig      `mapstructure:"core"`
-	SchedulerConfig schedulerConfig `mapstructure:"scheduler"`
+	DebugConfig     debugConfig     `yaml:"debug"`
+	PProfConfig     pprofConfig     `yaml:"pprof"`
+	MonitorConfig   monitorConfig   `yaml:"monitor"`
+	CoreConfig      coreConfig      `yaml:"core"`
+	SchedulerConfig schedulerConfig `yaml:"scheduler"`
+}
+
+// write config into file
+func (config  *CMConfig) WriteFile(fileName string,fileMode int) error {
+
+	data,err := yaml.Marshal(config)
+	if err != nil{
+		return err
+	}
+
+	err = ioutil.WriteFile(fileName,data,fileMode)
+	if err != nil{
+		return err
+	}
+}
+
+//read config from configfile
+func (config *CMConfgi) ReadFile(fileName string) error {
+
+	data,err := ioutil.ReadFile(fileName)
+	if err != nil{
+		return err
+	}
+
+	err := yaml.Unmarshal(data,config)
+	if err != nil{
+		return err
+	}
 }
 
 // GetBlockChains - get blockchain config list
