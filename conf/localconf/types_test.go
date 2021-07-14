@@ -1,8 +1,6 @@
 package localconf
 
 import(
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
 	"testing"
 	"fmt"
 	"encoding/json"
@@ -17,24 +15,15 @@ func formatStruct(t interface{}){
 }
 
 func TestTypes(t *testing.T) {
-
-	var setting CMConfig
-	config,err := ioutil.ReadFile("./chainmaker.yml")
-	if err != nil{
-		fmt.Print(err)
-	}
-	yaml.Unmarshal(config,&setting)
-	formatStruct(setting)
-	if err != nil{
-		t.Fatalf("%v",err)
+	var setting = &CMConfig{}
+	if err := setting.ReadFile("./chainmaker.yml"); err != nil {
+		t.Error(err)
 	}
 
-	data2,err := yaml.Marshal(setting)
-	if err != nil{
-		t.Fatalf("%v",err)
+	if err := setting.WriteFile("./test-1.yml",0664); err != nil{
+		t.Error(err)
 	}
 
-	ioutil.WriteFile("./test.yaml",data2,0664)
 }
 
 

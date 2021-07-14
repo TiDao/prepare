@@ -10,6 +10,8 @@ package localconf
 import (
 	"chainmaker.org/chainmaker-go/logger"
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"io/fs"
 )
 
 type nodeConfig struct {
@@ -370,7 +372,7 @@ type CMConfig struct {
 }
 
 // write config into file
-func (config  *CMConfig) WriteFile(fileName string,fileMode int) error {
+func (config  *CMConfig) WriteFile(fileName string,fileMode fs.FileMode) error {
 
 	data,err := yaml.Marshal(config)
 	if err != nil{
@@ -381,20 +383,24 @@ func (config  *CMConfig) WriteFile(fileName string,fileMode int) error {
 	if err != nil{
 		return err
 	}
+
+	return nil
 }
 
 //read config from configfile
-func (config *CMConfgi) ReadFile(fileName string) error {
+func (config *CMConfig) ReadFile(fileName string) error {
 
 	data,err := ioutil.ReadFile(fileName)
 	if err != nil{
 		return err
 	}
 
-	err := yaml.Unmarshal(data,config)
+	err = yaml.Unmarshal(data,config)
 	if err != nil{
 		return err
 	}
+
+	return nil
 }
 
 // GetBlockChains - get blockchain config list
