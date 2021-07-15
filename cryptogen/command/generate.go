@@ -16,7 +16,7 @@ import (
 	"chainmaker.org/chainmaker-go/common/helper"
 	"chainmaker.org/chainmaker-go/common/random/uuid"
 	"github.com/mr-tron/base58/base58"
-	"github.com/spf13/cobra"
+	//"github.com/spf13/cobra"
 )
 
 //func GenerateCmd() *cobra.Command {
@@ -32,7 +32,7 @@ import (
 //	return generateCmd
 //}
 
-func generate() error {
+func Generate() error {
 	cryptoGenConfig := config.GetCryptoGenConfig()
 
 	for _, item := range cryptoGenConfig.Item {
@@ -67,7 +67,7 @@ func generate() error {
 			for _, user := range item.User {
 				for j := 0; j < int(user.Count); j++ {
 					name := fmt.Sprintf("%s%d", user.Type, j+1)
-					path := filepath.Join(userPath, name)
+					path := filepath.Join(userPath)
 					if err := generateUser(path, name, caKeyPath, caCertPath,
 						user.Location.Country, user.Location.Locality, user.Location.Province, orgName, user.Type,
 						user.ExpireYear, keyType, hashType); err != nil {
@@ -79,7 +79,7 @@ func generate() error {
 			for _, node := range item.Node {
 				for j := 0; j < int(node.Count); j++ {
 					name := fmt.Sprintf("%s%d", node.Type, j+1)
-					path := filepath.Join(nodePath, name)
+					path := filepath.Join(nodePath)
 					if err := generateNode(path, name, caKeyPath, caCertPath,
 						node.Location.Country, node.Location.Locality, node.Location.Province, orgName, node.Type,
 						node.Specs.ExpireYear, node.Specs.SANS, keyType, hashType); err != nil {
