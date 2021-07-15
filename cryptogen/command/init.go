@@ -1,4 +1,4 @@
 package command
 
 var ConfigPath string
-var outputDir string
+//var outputDir string

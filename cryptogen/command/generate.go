@@ -19,18 +19,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func GenerateCmd() *cobra.Command {
-	generateCmd := &cobra.Command{
-		Use:   "generate",
-		Short: "Generate key material",
-		Long:  "Generate key material",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return generate()
-		},
-	}
-	generateCmd.Flags().StringVarP(&outputDir, "output", "o", "crypto-config", "specify the output directory in which to place artifacts")
-	return generateCmd
-}
+//func GenerateCmd() *cobra.Command {
+//	generateCmd := &cobra.Command{
+//		Use:   "generate",
+//		Short: "Generate key material",
+//		Long:  "Generate key material",
+//		RunE: func(cmd *cobra.Command, args []string) error {
+//			return generate()
+//		},
+//	}
+//	generateCmd.Flags().StringVarP(&outputDir, "output", "o", "crypto-config", "specify the output directory in which to place artifacts")
+//	return generateCmd
+//}
 
 func generate() error {
 	cryptoGenConfig := config.GetCryptoGenConfig()
@@ -44,11 +44,17 @@ func generate() error {
 			keyType := crypto.AsymAlgoMap[strings.ToUpper(item.PKAlgo)]
 			hashType := crypto.HashAlgoMap[strings.ToUpper(item.SKIHash)]
 
-			caPath := filepath.Join(outputDir, orgName, "ca")
+			//caPath := filepath.Join(outputDir, orgName, "ca")
+			//caKeyPath := filepath.Join(caPath, "ca.key")
+			//caCertPath := filepath.Join(caPath, "ca.crt")
+			//userPath := filepath.Join(outputDir, orgName, "user")
+			//nodePath := filepath.Join(outputDir, orgName, "node")
+
+			caPath := filepath.Join(orgName, "ca")
 			caKeyPath := filepath.Join(caPath, "ca.key")
 			caCertPath := filepath.Join(caPath, "ca.crt")
-			userPath := filepath.Join(outputDir, orgName, "user")
-			nodePath := filepath.Join(outputDir, orgName, "node")
+			userPath := filepath.Join(orgName, "user")
+			nodePath := filepath.Join(orgName, "node")
 
 			caCN := fmt.Sprintf("ca.%s", orgName)
 			caSANS := append(item.CA.Specs.SANS, caCN)
