@@ -32,7 +32,7 @@ func getInfo() {
 GetLogLevel:
 	for {
 		var loglevel string
-		fmt.Printf("which log level you want[DEBUG|INFO(default)|WARN|ERROR]: ")
+		fmt.Printf("input log level you want[DEBUG|INFO(default)|WARN|ERROR]: ")
 		fmt.Scanln(&loglevel)
 		switch loglevel {
 		case "DEBUG":
@@ -61,5 +61,45 @@ GetLogLevel:
 			continue
 		}
 	}
+
+getConsensus:
+	for {
+		var consensusType int
+		fmt.Printf("input consensus type (0-SOLO(default),1-TBFT,3-HOTSTUFF,4-RAFT,5-DPOS): ")
+		fmt.Scanln(&consensusType)
+		switch consensusType {
+		case 0:
+			//fmt.Println(consensusType)
+			initInfo.ConsensusType = consensusType
+			break getConsensus
+		case 1:
+			//fmt.Println(consensusType)
+			initInfo.ConsensusType = consensusType
+			break getConsensus
+		case 2:
+			//fmt.Println(consensusType)
+			initInfo.ConsensusType = consensusType
+			break getConsensus
+		case 3:
+			//fmt.Println(consensusType)
+			initInfo.ConsensusType = consensusType
+			break getConsensus
+		case 4:
+			//fmt.Println(consensusType)
+			initInfo.ConsensusType = consensusType
+			break getConsensus
+		case 5:
+			//fmt.Println(consensusType)
+			initInfo.ConsensusType = consensusType
+			break getConsensus
+		default:
+			//fmt.Println(consensusType)
+			fmt.Printf("%s not in [DEBUG|INFO(default)|WARN|ERROR],please input again.\n", 
+			consensusType)
+			continue
+		}
+	}
+
+
 
 }
