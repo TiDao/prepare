@@ -1,10 +1,9 @@
-package config
+package cryptogen
 
 import (
-	"log"
-
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	//"log"
 )
 
 var cryptoGenConfig *CryptoGenConfig
@@ -17,8 +16,9 @@ func LoadCryptoGenConfig(path string) {
 	cryptoGenConfig = &CryptoGenConfig{}
 
 	if err := cryptoGenConfig.loadConfig(path); err != nil {
-		log.Fatalf("load crypto config [%s] failed, %s",
-			path, err)
+	//	log.Fatalf("load crypto config [%s] failed, %s",
+	//		path, err)
+		return err
 	}
 
 	//cryptoGenConfig.printLog()
@@ -34,12 +34,12 @@ func (c *CryptoGenConfig) loadConfig(path string) error {
 	}
 
 	data, err := ioutil.ReadFile(path)
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
-	err = yaml.Unmarshal(data,c)
-	if err != nil{
+	err = yaml.Unmarshal(data, c)
+	if err != nil {
 		return err
 	}
 

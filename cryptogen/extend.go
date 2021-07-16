@@ -1,4 +1,4 @@
-package command
+package cryptogen
 
 import (
 	"fmt"
@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"chainmaker.org/chainmaker-cryptogen/config"
 	"chainmaker.org/chainmaker-go/common/crypto"
 	"github.com/spf13/cobra"
 )
@@ -20,12 +19,12 @@ func ExtendCmd() *cobra.Command {
 			return extend()
 		},
 	}
-	extendCmd.Flags().StringVarP(&outputDir, "output", "o", "crypto-config", "specify the output directory in which to place artifacts")
+	extendCmd.Flags().StringVarP(&OutputDir, "output", "o", "crypto-config", "specify the output directory in which to place artifacts")
 	return extendCmd
 }
 
 func extend() error {
-	cryptoGenConfig := config.GetCryptoGenConfig()
+	cryptoGenConfig := GetCryptoGenConfig()
 
 	for _, item := range cryptoGenConfig.Item {
 		for i := 0; i < int(item.Count); i++ {
@@ -36,11 +35,11 @@ func extend() error {
 			keyType := crypto.AsymAlgoMap[strings.ToUpper(item.PKAlgo)]
 			hashType := crypto.HashAlgoMap[strings.ToUpper(item.SKIHash)]
 
-			caPath := filepath.Join(outputDir, orgName, "ca")
+			caPath := filepath.Join(OutputDir, orgName, "ca")
 			caKeyPath := filepath.Join(caPath, "ca.key")
 			caCertPath := filepath.Join(caPath, "ca.crt")
-			userPath := filepath.Join(outputDir, orgName, "user")
-			nodePath := filepath.Join(outputDir, orgName, "node")
+			userPath := filepath.Join(OutputDir, orgName, "user")
+			nodePath := filepath.Join(OutputDir, orgName, "node")
 
 			if _, err := os.Stat(caPath); os.IsNotExist(err) {
 				caCN := fmt.Sprintf("ca.%s", orgName)

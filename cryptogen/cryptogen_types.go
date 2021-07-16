@@ -1,4 +1,4 @@
-package config
+package cryptogen
 
 type userConfig struct {
 	Type       string         `yaml:"type"`

@@ -1,4 +1,4 @@
-package command
+package cryptogen
 
 import (
 	"crypto/sha256"
@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"chainmaker.org/chainmaker-cryptogen/config"
 	"chainmaker.org/chainmaker-go/common/cert"
 	"chainmaker.org/chainmaker-go/common/crypto"
 	bcx509 "chainmaker.org/chainmaker-go/common/crypto/x509"
@@ -33,7 +32,7 @@ import (
 //}
 
 func Generate() error {
-	cryptoGenConfig := config.GetCryptoGenConfig()
+	cryptoGenConfig := GetCryptoGenConfig()
 
 	for _, item := range cryptoGenConfig.Item {
 		for i := 0; i < int(item.Count); i++ {
@@ -50,11 +49,11 @@ func Generate() error {
 			//userPath := filepath.Join(outputDir, orgName, "user")
 			//nodePath := filepath.Join(outputDir, orgName, "node")
 
-			caPath := filepath.Join(orgName, "ca")
+			caPath := filepath.Join(OutputDir, orgName, "ca")
 			caKeyPath := filepath.Join(caPath, "ca.key")
 			caCertPath := filepath.Join(caPath, "ca.crt")
-			userPath := filepath.Join(orgName, "user")
-			nodePath := filepath.Join(orgName, "node")
+			userPath := filepath.Join(OutputDir, orgName, "user")
+			nodePath := filepath.Join(OutputDir, orgName, "node")
 
 			caCN := fmt.Sprintf("ca.%s", orgName)
 			caSANS := append(item.CA.Specs.SANS, caCN)

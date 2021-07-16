@@ -9,19 +9,19 @@ package logger
 
 // LogConfig: the config of log module
 type LogConfig struct {
-	ConfigFile string        `mapstructure:"config_file"`
-	SystemLog  LogNodeConfig `mapstructure:"system"`
-	BriefLog   LogNodeConfig `mapstructure:"brief"`
-	EventLog   LogNodeConfig `mapstructure:"event"`
+	ConfigFile string        `mapstructure:"config_file" yaml:"config_file"`
+	SystemLog  LogNodeConfig `mapstructure:"system" yaml:"system"`
+	BriefLog   LogNodeConfig `mapstructure:"brief" yaml:"brief"`
+	EventLog   LogNodeConfig `mapstructure:"event" yaml:"event"`
 }
 
 // LogNodeConfig: the log config of node
 type LogNodeConfig struct {
-	LogLevelDefault string            `mapstructure:"log_level_default"`
-	LogLevels       map[string]string `mapstructure:"log_levels"`
-	FilePath        string            `mapstructure:"file_path"`
-	MaxAge          int               `mapstructure:"max_age"`
-	RotationTime    int               `mapstructure:"rotation_time"`
-	LogInConsole    bool              `mapstructure:"log_in_console"`
-	ShowColor       bool              `mapstructure:"show_color"`
+	LogLevelDefault string            `mapstructure:"log_level_default" yaml:"log_level_default"`
+	LogLevels       map[string]string `mapstructure:"log_levels" yaml:"log_levels"`
+	FilePath        string            `mapstructure:"file_path" yaml:"file_path"`
+	MaxAge          int               `mapstructure:"max_age" yaml:"max_age"`
+	RotationTime    int               `mapstructure:"rotation_time" yaml:"rotation_time"`
+	LogInConsole    bool              `mapstructure:"log_in_console" yaml:"log_in_console"`
+	ShowColor       bool              `mapstructure:"show_color" yaml:"show_color"`
 }

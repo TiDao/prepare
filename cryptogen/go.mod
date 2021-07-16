@@ -1,16 +1,12 @@
-module chainmaker.org/chainmaker-cryptogen
+module cryptogen
 
-go 1.14
+go 1.16
 
 require (
-	chainmaker.org/chainmaker-go/common v0.0.0-00010101000000-000000000000
+	chainmaker.org/chainmaker-go/common v0.0.0
 	github.com/mr-tron/base58 v1.2.0
-	github.com/spf13/cobra v1.1.1
-	github.com/spf13/viper v1.7.0
-	gopkg.in/yaml.v2 v2.2.8 // indirect
+	github.com/spf13/cobra v1.2.1
+	gopkg.in/yaml.v2 v2.4.0
 )
 
-replace (
-	chainmaker.org/chainmaker-cryptogen/conf => ./conf
-	chainmaker.org/chainmaker-go/common => ../common
-)
+replace chainmaker.org/chainmaker-go/common => ../common
