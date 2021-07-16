@@ -76,10 +76,6 @@ getConsensus:
 			//fmt.Println(consensusType)
 			initInfo.ConsensusType = consensusType
 			break getConsensus
-		case 2:
-			//fmt.Println(consensusType)
-			initInfo.ConsensusType = consensusType
-			break getConsensus
 		case 3:
 			//fmt.Println(consensusType)
 			initInfo.ConsensusType = consensusType
@@ -99,7 +95,5 @@ getConsensus:
 			continue
 		}
 	}
-
-
 
 }
