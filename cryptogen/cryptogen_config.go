@@ -12,7 +12,7 @@ const (
 	defaultCryptoConfigPath = "../config/crypto_config_template.yml"
 )
 
-func LoadCryptoGenConfig(path string) {
+func LoadCryptoGenConfig(path string) error {
 	cryptoGenConfig = &CryptoGenConfig{}
 
 	if err := cryptoGenConfig.loadConfig(path); err != nil {
@@ -21,6 +21,7 @@ func LoadCryptoGenConfig(path string) {
 		return err
 	}
 
+	return nil
 	//cryptoGenConfig.printLog()
 }
 

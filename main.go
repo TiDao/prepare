@@ -53,11 +53,9 @@ func checkParams(nodeCNT,chainCNT,p2pPort,rpcPort uint){
 	}
 }
 
-func generate_certs() {
-
-}
 
 func main(){
 	flag.Parse()
 	checkParams(nodeCNT,chainCNT,p2pPort,rpcPort)
+	getInfo()
 }

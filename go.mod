@@ -2,12 +2,15 @@ module prepare
 
 go 1.16
 
-require(
-		localconf v0.0.0
-		cryptogen v0.0.0
+require (
+	cryptogen v0.0.0
+	localconf v0.0.0
 )
 
-replace(
-		localconf => ./localconf
-		cryptogen => ./cryptogen
-		)
+replace (
+	chainmaker.org/chainmaker-go/common => ./common
+	chainmaker.org/chainmaker-go/logger => ./logger
+	chainmaker.org/chainmaker-go/pb/protogo => ./protogo
+	cryptogen => ./cryptogen
+	localconf => ./localconf
+)

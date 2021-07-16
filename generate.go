@@ -2,7 +2,7 @@ package main
 
 import(
 	"cryptogen"
-	"localconf"
+	//"localconf"
 )
 
 
@@ -20,4 +20,3 @@ func generate_certs(outputDir string,configFile string) error{
 	return nil
 }
 
-func 
