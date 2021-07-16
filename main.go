@@ -13,7 +13,6 @@ var (
 	rpcPort uint
 )
 
-var nodeNumber = []uint{1,4,5,10,13}
 func init(){
 	nodeCNT = *flag.Uint("nodeCnt",4,"the number of nodes")
 	chainCNT = *flag.Uint("chainCnt",1,"the number of chains")
@@ -21,7 +20,8 @@ func init(){
 	rpcPort = *flag.Uint("rpcPort",12300,"the port of rpc")
 }
 
-func check_nodeNumber(nodeCNT uint,nodeNumber []uint) bool{
+func check_nodeNumber(nodeCNT uint) bool{
+	var nodeNumber = []uint{1,4,5,10,13}
 	for _,b := range nodeNumber{
 		if b == nodeCNT{
 			return true
@@ -31,7 +31,7 @@ func check_nodeNumber(nodeCNT uint,nodeNumber []uint) bool{
 }
 
 func checkParams(nodeCNT,chainCNT,p2pPort,rpcPort uint){
-	if !check_nodeNumber(nodeCNT,nodeNumber) {
+	if !check_nodeNumber(nodeCNT) {
 		fmt.Println("nodeCnt should be 1 or 4 or 7 or 10 or 13")
 		fmt.Println(nodeCNT)
 		os.Exit(1)
