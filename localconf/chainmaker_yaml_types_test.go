@@ -2,7 +2,7 @@ package localconf
 
 import(
 	"testing"
-	//"fmt"
+	"fmt"
 	//"encoding/json"
 	//"bytes"
 )
@@ -17,17 +17,19 @@ import(
 func TestTypes(t *testing.T) {
 	var setting = &CMConfig{}
 	if err := setting.ReadFile("../config/chainmaker.yml"); err != nil {
-		t.Error(err)
+		fmt.Println("chainmaker.yml")
+		t.Error("unmarsh chainamker.yml",err)
 	}
 
 	//formatStruct(setting)
 
 	if err := setting.ReadFile("../config/log.yml");err != nil{
-		t.Error(err)
+		fmt.Println("log.yml")
+		t.Error("unmarshal log.yml: ",err)
 	}
 
 	if err := setting.WriteFile("../config/test-1.yml",0664); err != nil{
-		t.Error(err)
+		t.Error("write", err)
 	}
 
 }
