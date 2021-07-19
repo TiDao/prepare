@@ -41,10 +41,10 @@ net:
 #  max_peer_count_allow: 20
 #  peer_elimination_strategy: 3  # 1 Random, 2 FIFO, 3 LIFO
   seeds:
-    - "/ip4/127.0.0.1/tcp/11301/p2p/QmXuATvBLrji8DjdCg1kyWAuKqwqy5S4RB5KuAiqsci6ks"
-    - "/ip4/127.0.0.1/tcp/11302/p2p/QmS515QwRNfxeUhtoxFDdTbQVcrRMSC5GDEMKF62RczBHL"
-    - "/ip4/127.0.0.1/tcp/11303/p2p/QmTqyA7TT6SCScbP7741aMWVLDTuuzLRX36YXeMMFDa21u"
-    - "/ip4/127.0.0.1/tcp/11304/p2p/QmU6FeVU23w9hdKWniH5uv2eSY5WYmVutT6UiJ8UUokRhb"
+    - "/dns4/localhost/tcp/11301/p2p/QmQddWHicPVBfh8QAwhxNTR5FRZo7BL1osBPSHTpt4LzzD"
+    - "/dns4/localhost/tcp/11302/p2p/QmaawSrswxA5LshgDNpJAKsaXURCb3UKCrvV63zHgTyHDe"
+    - "/dns4/localhost/tcp/11303/p2p/QmPswEd5gJeNAqUtNhb1r6fGgthXGBLqhiEpYh3bE34aLE"
+    - "/dns4/localhost/tcp/11304/p2p/QmVW9KVaMAc22C2RENTbT58GjjBoTuKSp9ZWcftbst7rBQ"
 
   tls:
     enabled: true

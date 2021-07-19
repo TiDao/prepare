@@ -1,0 +1,70 @@
+chainid: ""
+version: v1.2.0
+auth_type: identity
+sequence: 1
+crypto:
+  hash: SHA256
+block:
+  tx_timestamp_verify: true
+  tx_timeout: 600
+  block_tx_capacity: 100
+  block_size: 10
+  block_interval: 2000
+core:
+  tx_scheduler_timeout: 10
+  tx_scheduler_validate_timeout: 10
+consensus:
+  nodes:
+  - org_id: '{org1_id}'
+    node_id:
+    - '{org1_peerid}'
+  - org_id: '{org2_id}'
+    node_id:
+    - '{org2_peerid}'
+  - org_id: '{org3_id}'
+    node_id:
+    - '{org3_peerid}'
+  - org_id: '{org4_id}'
+    node_id:
+    - '{org4_peerid}'
+  ext_config:
+  - key: aa
+    value: chain01_ext11
+  dpos_config:
+  - key: erc20.total
+    value: '{erc20_total}'
+  - key: erc20.owner
+    value: '{org1_peeraddr}'
+  - key: erc20.decimals
+    value: "18"
+  - key: erc20.account:SYSTEM_CONTRACT_DPOS_STAKE
+    value: '{erc20_total}'
+  - key: stake.minSelfDelegation
+    value: "2500000"
+  - key: stake.epochValidatorNum
+    value: '{epochValidatorNum}'
+  - key: stake.epochBlockNum
+    value: "10"
+  - key: stake.completionUnbondingEpochNum
+    value: "1"
+  - key: stake.candidate:"{org1_peeraddr}"
+    value: "2500000"
+  - key: stake.candidate:"{org2_peeraddr}"
+    value: "2500000"
+  - key: stake.candidate:"{org3_peeraddr}"
+    value: "2500000"
+  - key: stake.candidate:"{org4_peeraddr}"
+    value: "2500000"
+  - key: stake.nodeID:"{org1_peeraddr}"
+    value: '{org1_peerid}'
+  - key: stake.nodeID:"{org2_peeraddr}"
+    value: '{org2_peerid}'
+  - key: stake.nodeID:"{org3_peeraddr}"
+    value: '{org3_peerid}'
+  - key: stake.nodeID:"{org4_peeraddr}"
+    value: '{org4_peerid}'
+trustroots: []
+resourcepolicies: []
+contract: {}
+snapshot: {}
+scheduler: {}
