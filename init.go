@@ -7,11 +7,11 @@ import (
 type InitInfo struct {
 	LogLevel      string
 	ConsensusType int
+	NodeCNT       int
+	ChainCNT      int
 	MonitorPort   int
 	PprofPort     int
 	TrustedPort   int
-	NodeCNT       int
-	ChainCNT      int
 	P2Port        int
 	RpcPort       int
 }
@@ -84,7 +84,6 @@ getConsensus:
 			//fmt.Printf(consensusType)
 			initInfo.ConsensusType = 1
 			break getConsensus
-<<<<<<< HEAD
 		case "3":
 			//fmt.Printf(consensusType)
 			initInfo.ConsensusType = 3
@@ -92,12 +91,6 @@ getConsensus:
 		case "4":
 			//fmt.Printf(consensusType)
 			initInfo.ConsensusType = 4
-=======
-		case 3:
-			//fmt.Println(consensusType)
-			initInfo.ConsensusType = consensusType
->>>>>>> 9722e9a63da4534f3df2447af6d2e4238d42fbf8
-			break getConsensus
 		case "5":
 			//fmt.Printf(consensusType)
 			initInfo.ConsensusType = 5
@@ -111,7 +104,6 @@ getConsensus:
 		}
 	}
 
-<<<<<<< HEAD
 getMonitorPort:
 	for {
 		var port int
@@ -229,6 +221,4 @@ getChainCNT:
 		}
 	}
 	return initInfo
-=======
->>>>>>> 9722e9a63da4534f3df2447af6d2e4238d42fbf8
 }
