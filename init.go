@@ -28,13 +28,13 @@ func getInfo() *InitInfo{
 	var initInfo = &InitInfo{
 		LogLevel:      "INFO",
 		ConsensusType: 1,
+		NodeCNT:       4,
+		ChainCNT:      1,
 		MonitorPort:   14320,
 		PprofPort:     24330,
 		TrustedPort:   13300,
 		P2Port:        11300,
 		RpcPort:       12300,
-		NodeCNT:       4,
-		ChainCNT:      1,
 	}
 
 GetLogLevel:
