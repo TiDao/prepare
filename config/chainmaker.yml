@@ -6,11 +6,11 @@
 #
 
 log:
-  config_file: ../config/wx-org1.chainmaker.org/log.yml          # config file of logger configuration.
+  config_file: /home/heyue/log.yml          # config file of logger configuration.
 
 blockchain:
-  - chainId: chain1
-    genesis: ../config/wx-org1.chainmaker.org/chainconfig/bc1.yml
+#  - chainId: chain1
+#    genesis: ../config/{org_path1}/chainconfig/bc1.yml
 #  - chainId: chain2
 #    genesis: ../config/{org_path2}/chainconfig/bc2.yml
 #  - chainId: chain3
@@ -21,9 +21,9 @@ blockchain:
 node:
   # 节点类型：full、spv
   type:              full
-  org_id:            wx-org1.chainmaker.org
-  priv_key_file:     ../config/wx-org1.chainmaker.org/certs/node/consensus1/consensus1.sign.key
-  cert_file:         ../config/wx-org1.chainmaker.org/certs/node/consensus1/consensus1.sign.crt
+  org_id:            wx-org2.chainmaker.org
+  priv_key_file:     /home/heyue/node/consensus1.sign.key
+  cert_file:         /home/heyue/node/consensus1.sing.crt
   signer_cache_size: 1000
   cert_cache_size:   1000
   pkcs11:
@@ -36,20 +36,16 @@ node:
 
 net:
   provider: LibP2P
-  listen_addr: /ip4/0.0.0.0/tcp/11301
+  listen_addr: 
 #  peer_stream_pool_size: 100
 #  max_peer_count_allow: 20
 #  peer_elimination_strategy: 3  # 1 Random, 2 FIFO, 3 LIFO
   seeds:
-    - "/dns4/localhost/tcp/11301/p2p/QmQddWHicPVBfh8QAwhxNTR5FRZo7BL1osBPSHTpt4LzzD"
-    - "/dns4/localhost/tcp/11302/p2p/QmaawSrswxA5LshgDNpJAKsaXURCb3UKCrvV63zHgTyHDe"
-    - "/dns4/localhost/tcp/11303/p2p/QmPswEd5gJeNAqUtNhb1r6fGgthXGBLqhiEpYh3bE34aLE"
-    - "/dns4/localhost/tcp/11304/p2p/QmVW9KVaMAc22C2RENTbT58GjjBoTuKSp9ZWcftbst7rBQ"
 
   tls:
     enabled: true
-    priv_key_file: ../config/wx-org1.chainmaker.org/certs/node/consensus1/consensus1.tls.key
-    cert_file:     ../config/wx-org1.chainmaker.org/certs/node/consensus1/consensus1.tls.crt
+    priv_key_file: /home/heyue/node/consensus1.tls.key
+    cert_file:     /home/heyue/node/consensus1.tls.crt
 #  blacklist:
 #    addresses:
 #      - "127.0.0.1:11305"
@@ -60,8 +56,8 @@ net:
 #  custom_chain_trust_roots:
 #    - chain_id: "chain1"
 #      trust_roots:
-#        - org_id: "wx-org1.chainmaker.org"
-#          root: "../config/wx-org1.chainmaker.org/certs/ca/wx-org1.chainmaker.org/ca.crt"
+#        - org_id: "{org_id}"
+#          root: "../config/{org_path}/certs/ca/{org_id}/ca.crt"
 
 
 txpool:
@@ -73,7 +69,7 @@ txpool:
 
 rpc:
   provider: grpc
-  port: 12301
+  port: 12300
   # 检查链配置TrustRoots证书变化时间间隔，单位：s，最小值为10s
   check_chain_conf_trust_roots_change_interval: 60
   ratelimit:
@@ -96,37 +92,37 @@ rpc:
     #mode: disable
     #mode: oneway
     mode:           twoway
-    priv_key_file:  ../config/wx-org1.chainmaker.org/certs/node/consensus1/consensus1.tls.key
-    cert_file:      ../config/wx-org1.chainmaker.org/certs/node/consensus1/consensus1.tls.crt
+    priv_key_file:  /home/heyue/consensus1.tls.key
+    cert_file:      /home/heyue/consensus1.tls.crt
 
 monitor:
   enabled: true
-  port: 14321
+  port: 14320
 
 pprof:
   enabled: false
-  port: 24321
+  port: 24330
 
 storage:
-  store_path: ../data/wx-org1.chainmaker.org/ledgerData1
+  store_path: /home/heyue/data/ledgerData
   # 最小的不允许归档的区块高度
   unarchive_block_height: 300000
   blockdb_config:
     provider: leveldb
     leveldb_config:
-      store_path: ../data/wx-org1.chainmaker.org/blocks
+      store_path: /home/heyue/data/blocks
   statedb_config:
     provider: leveldb
     leveldb_config:
-      store_path: ../data/wx-org1.chainmaker.org/state
+      store_path: /home/heyue/data/state
   historydb_config:
     provider: leveldb
     leveldb_config:
-      store_path: ../data/wx-org1.chainmaker.org/history
+      store_path: /home/heyue/data/history
   resultdb_config:
     provider: leveldb
     leveldb_config:
-      store_path: ../data/wx-org1.chainmaker.org/result
+      store_path: /home/heyue/data/result
   disable_contract_eventdb: true  #是否禁止合约事件存储功能，默认为true，如果设置为false,需要配置mysql
   contract_eventdb_config:
     provider: sql                 #如果开启contract event db 功能，需要指定provider为sql

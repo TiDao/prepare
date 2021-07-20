@@ -132,7 +132,7 @@ type debugConfig struct {
 	IsNetInsecurity      bool `yaml:"is_net_insecurity"`
 }
 
-type blockchainConfig struct {
+type BlockchainConfig struct {
 	ChainId string
 	Genesis string
 }
@@ -357,7 +357,7 @@ type CMConfig struct {
 	NetConfig        netConfig          `yaml:"net"`
 	NodeConfig       nodeConfig         `yaml:"node"`
 	RpcConfig        rpcConfig          `yaml:"rpc"`
-	BlockChainConfig []blockchainConfig `yaml:"blockchain"`
+	BlockChainConfig []BlockchainConfig `yaml:"blockchain"`
 	StorageConfig    StorageConfig      `yaml:"storage"`
 	TxPoolConfig     txPoolConfig       `yaml:"txpool"`
 	SyncConfig       syncConfig         `yaml:"sync"`
@@ -404,6 +404,6 @@ func (config *CMConfig) ReadFile(fileName string) error {
 }
 
 // GetBlockChains - get blockchain config list
-func (c *CMConfig) GetBlockChains() []blockchainConfig {
+func (c *CMConfig) GetBlockChains() []BlockchainConfig {
 	return c.BlockChainConfig
 }
