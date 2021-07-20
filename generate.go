@@ -4,9 +4,9 @@ import (
 	"cryptogen"
 	"io/ioutil"
 	"localconf"
+	"os"
 	"path/filepath"
 	"strconv"
-	"os"
 )
 
 func generate_certs(outputDir string) error {
@@ -21,10 +21,10 @@ func generate_config(initInfo *InitInfo, node int) error {
 
 	//read config files and get CMConfig object
 	config := &localconf.CMConfig{}
-	if err := config.ReadFile("./config/chainmaker.yml"); err != nil{
+	if err := config.ReadFile("./config/chainmaker.yml"); err != nil {
 		return err
 	}
-	if err := config.ReadFile("./config/log.yml"); err != nil{
+	if err := config.ReadFile("./config/log.yml"); err != nil {
 		return err
 	}
 	certsPath := "./test_output"
@@ -70,14 +70,36 @@ func generate_config(initInfo *InitInfo, node int) error {
 	config.PProfConfig.Port = initInfo.PProfPort
 
 	fileDir := filepath.Join(certsPath, initInfo.OrgIDs[node], "config")
-	err := os.MkdirAll(fileDir,0777)
+	err := os.MkdirAll(fileDir, 0777)
 	if err != nil {
 		return err
 	}
-	filePath := filepath.Join(fileDir,"chainmaker.yml")
+	filePath := filepath.Join(fileDir, "chainmaker.yml")
 	err = config.WriteFile(filePath, 0664)
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func generate_genesis(initInfo *InitInfo, node int,chainId int) error {
+	certsDir := "./test_output"
+	config := &localconf.ChainConfig{}
+	var fileTemplate string
+	switch initInfo.NodeCNT {
+	case 1:
+		fileTemplate = filepath.Join("./config", "bc_solo.yml")
+	case 4 | 7:
+		fileTemplate = filepath.Join("./config", "bc_4_7.yml")
+	case 16:
+		fileTemplate = filepath.Join("./config", "bc_16.yml")
+	}
+
+	if err := config.ReadFile(fileTemplate); err != nil{
+		return err
+	}
+
+	config.ChainId = strconv.Itoa(chainId)
+
 	return nil
 }
