@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 type InitInfo struct {
@@ -10,10 +11,11 @@ type InitInfo struct {
 	NodeCNT       int
 	ChainCNT      int
 	MonitorPort   int
-	PprofPort     int
+	PProfPort     int
 	TrustedPort   int
 	P2Port        int
 	RpcPort       int
+	OrgIDs        []string
 }
 
 func checkPort(port int, min int, max int) bool {
@@ -31,11 +33,12 @@ func getInfo() *InitInfo{
 		NodeCNT:       4,
 		ChainCNT:      1,
 		MonitorPort:   14320,
-		PprofPort:     24330,
+		PProfPort:     24330,
 		TrustedPort:   13300,
 		P2Port:        11300,
 		RpcPort:       12300,
 	}
+
 
 GetLogLevel:
 	for {
@@ -117,16 +120,16 @@ getMonitorPort:
 		}
 	}
 
-getPprofPort:
+getPProfPort:
 	for {
 		var port int
 		fmt.Printf("input pprof Port[10000-60000,default:24330]:")
 		fmt.Scanln(&port)
 		if checkPort(port, 10000, 60000) {
-			initInfo.PprofPort = port
-			break getPprofPort
+			initInfo.PProfPort = port
+			break getPProfPort
 		} else if port == 0 {
-			break getPprofPort
+			break getPProfPort
 		}
 	}
 
@@ -220,5 +223,11 @@ getChainCNT:
 			continue
 		}
 	}
+
+	for i := 1;i <= initInfo.NodeCNT;i++{
+		orgId := "wx-org"+strconv.Itoa(i)+".chainmaker.org"
+		initInfo.OrgIDs = append(initInfo.OrgIDs,orgId)
+	}
+
 	return initInfo
 }

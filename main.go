@@ -4,6 +4,7 @@ import(
 	"fmt"
 	"log"
 	"cryptogen"
+	//"localconf"
 )
 
 
@@ -20,7 +21,18 @@ func main(){
 	if err := generate_certs("./test_output");err != nil{
 		log.Fatal(err)
 	}
-	var initInfo *InitInfo
-	initInfo = getInfo()
+
+	//return *InitInfo
+	initInfo := getInfo()
+	fmt.Println(initInfo)
+
+
+	for i := 0;i < initInfo.NodeCNT; i++ {
+		err := generate_config(initInfo,i)
+		if err != nil{
+			log.Fatalf("generate config error: %v",err)
+		}
+	}
+
 	fmt.Println(initInfo)
 }
