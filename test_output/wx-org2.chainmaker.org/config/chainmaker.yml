@@ -33,10 +33,10 @@ net:
   max_peer_count_allow: 0
   peer_elimination_strategy: 0
   seeds:
-  - /dns4/chainmaker-0/tcp/11300/p2p/QmSAhEwitjFx1VUd3U2yYixNdYCfSoBGxE6g4zrj13XCL2
-  - /dns4/chainmaker-1/tcp/11300/p2p/QmckYSQqBpjDQXvEBTfx8yAkgAqfTwu5HEVPTWeyPakbYV
-  - /dns4/chainmaker-2/tcp/11300/p2p/QmNUpH3t335QzvHpv4Q24y6uTbkodyXpP7iJyKiCZ2Ppy7
-  - /dns4/chainmaker-3/tcp/11300/p2p/Qmb1ZMapWyHhMkzZbNiTS9ov8QF6Q7GryuqcCgTQfPVq9W
+  - /dns4/chainmaker-0/tcp/11300/p2p/QmXwmcmWx8agTvQNs6SbPTwrUoh2izkYLc5xRCKhDeZmD4
+  - /dns4/chainmaker-1/tcp/11300/p2p/QmZUVQaFLnY7Ky5jcY1zBATCJjBBNWN6knwtqeDNGRjMYf
+  - /dns4/chainmaker-2/tcp/11300/p2p/QmSc38i8zipxNxTqy1khcsCLZiX2AjryxdDbnqrLFhxgr5
+  - /dns4/chainmaker-3/tcp/11300/p2p/QmRPEeN3jmPLZvmWT7LfCRvBSYoghNfBsW5t9p4FFqV9q3
   tls:
     enabled: true
     priv_key_file: /home/heyue/node/consensus1.tls.key

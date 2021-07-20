@@ -1,7 +1,7 @@
 package main
 
 import(
-	"fmt"
+	//"fmt"
 	"log"
 	"cryptogen"
 	//"localconf"
@@ -16,15 +16,15 @@ func main(){
 	if err != nil{
 		log.Fatal(err)
 	}
-	cryptoConfig := cryptogen.GetCryptoGenConfig()
-	fmt.Println(cryptoConfig)
+	//cryptoConfig := cryptogen.GetCryptoGenConfig()
+	//fmt.Println(cryptoConfig)
 	if err := generate_certs("./test_output");err != nil{
 		log.Fatal(err)
 	}
 
 	//return *InitInfo
 	initInfo := getInfo()
-	fmt.Println(initInfo)
+	//fmt.Println(initInfo)
 
 
 	for i := 0;i < initInfo.NodeCNT; i++ {
@@ -34,5 +34,5 @@ func main(){
 		}
 	}
 
-	fmt.Println(initInfo)
+	//fmt.Println(initInfo)
 }

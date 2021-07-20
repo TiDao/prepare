@@ -83,7 +83,7 @@ func generate_config(initInfo *InitInfo, node int) error {
 }
 
 func generate_genesis(initInfo *InitInfo, node int,chainId int) error {
-	certsDir := "./test_output"
+	//certsDir := "./test_output"
 	config := &localconf.ChainConfig{}
 	var fileTemplate string
 	switch initInfo.NodeCNT {
