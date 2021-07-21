@@ -6,16 +6,16 @@ import (
 	//"log"
 )
 
-var cryptoGenConfig *CryptoGenConfig
+var CryptoConfig *CryptoGenConfig
 
 const (
 	defaultCryptoConfigPath = "../config/crypto_config_template.yml"
 )
 
 func LoadCryptoGenConfig(path string) error {
-	cryptoGenConfig = &CryptoGenConfig{}
+	CryptoConfig = &CryptoGenConfig{}
 
-	if err := cryptoGenConfig.loadConfig(path); err != nil {
+	if err := CryptoConfig.loadConfig(path); err != nil {
 	//	log.Fatalf("load crypto config [%s] failed, %s",
 	//		path, err)
 		return err
@@ -26,7 +26,7 @@ func LoadCryptoGenConfig(path string) error {
 }
 
 func GetCryptoGenConfig() *CryptoGenConfig {
-	return cryptoGenConfig
+	return CryptoConfig
 }
 
 func (c *CryptoGenConfig) loadConfig(path string) error {

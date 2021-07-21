@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"cryptogen"
 )
 
 type InitInfo struct {
@@ -178,20 +179,38 @@ getNodeCNT:
 		switch CNT {
 		case 1:
 			initInfo.NodeCNT = CNT
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+				cryptogen.CryptoConfig.Item[i].Count = 1
+			}
 			break getNodeCNT
 		case 4:
 			initInfo.NodeCNT = CNT
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+				cryptogen.CryptoConfig.Item[i].Count = 4
+			}
 			break getNodeCNT
 		case 7:
 			initInfo.NodeCNT = CNT
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+				cryptogen.CryptoConfig.Item[i].Count = 7
+			}
 			break getNodeCNT
 		case 10:
 			initInfo.NodeCNT = CNT
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+				cryptogen.CryptoConfig.Item[i].Count = 10
+			}
 			break getNodeCNT
 		case 13:
 			initInfo.NodeCNT = CNT
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+				cryptogen.CryptoConfig.Item[i].Count = 13
+			}
 			break getNodeCNT
 		case 0:
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+				cryptogen.CryptoConfig.Item[i].Count = 1
+			}
 			break getNodeCNT
 		default:
 			fmt.Printf("node count should be 1 or 4 or 7 or 10 or 13")
