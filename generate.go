@@ -9,11 +9,21 @@ import (
 	"strconv"
 )
 
-func generate_certs(outputDir string) error {
+func generate_certs(initInfo *InitInfo, outputDir string) error {
+
 	cryptogen.OutputDir = outputDir
+
+	//if consensus type is solo change config Object
+	if initInfo.ConsensusType == 0 {
+		for i := 0; i < len(cryptogen.CryptoConfig.Item); i++ {
+			cryptogen.CryptoConfig.Item[i].Count = 1
+		}
+	}
+
 	if err := cryptogen.Generate(); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -39,7 +49,7 @@ func generate_config(initInfo *InitInfo, node int) error {
 	//config chain Block list
 	for i := 1; i <= initInfo.ChainCNT; i++ {
 		blockChainItem := localconf.BlockchainConfig{
-			ChainId: string(i),
+			ChainId: "chain" + strconv.Itoa(i),
 			Genesis: "/home/heyue/config" + "bc" + strconv.Itoa(i) + ".yml",
 		}
 
@@ -82,9 +92,8 @@ func generate_config(initInfo *InitInfo, node int) error {
 	return nil
 }
 
-func generate_genesis(initInfo *InitInfo, node int,chainId int) error {
+func generate_genesis(initInfo *InitInfo, node int) error {
 	//certsDir := "./test_output"
-	config := &localconf.ChainConfig{}
 	var fileTemplate string
 	switch initInfo.NodeCNT {
 	case 1:
@@ -93,13 +102,49 @@ func generate_genesis(initInfo *InitInfo, node int,chainId int) error {
 		fileTemplate = filepath.Join("./config", "bc_4_7.yml")
 	case 16:
 		fileTemplate = filepath.Join("./config", "bc_16.yml")
+	default:
+		fileTemplate = filepath.Join("./config", "bc_10_13.yml")
 	}
 
-	if err := config.ReadFile(fileTemplate); err != nil{
-		return err
+	for i := 1; i <= initInfo.ChainCNT; i++ {
+		config := &localconf.ChainConfig{}
+		if err := config.ReadFile(fileTemplate); err != nil {
+			return err
+		}
+
+		config.ChainId = "chain" + strconv.Itoa(i)
+
+		switch initInfo.ConsensusType {
+		case 0:
+			//ConsensusType_SOLO
+			config.Consensus.Type = 0
+		case 1:
+			//ConsensusType_TBFT
+			config.Consensus.Type = 1
+		case 2:
+			//ConsensusType_MBFT
+			config.Consensus.Type = 2
+		case 3:
+			//ConsensusType_HOTSTUFF
+			config.Consensus.Type = 3
+		case 4:
+			//ConsensusType_RAFT
+			config.Consensus.Type = 4
+		case 5:
+			//ConsensusType_DPOS
+			config.Consensus.Type = 5
+		case 10:
+			//ConsensusType_POW
+			config.Consensus.Type = 10
+		default:
+			break
+		}
 	}
 
-	config.ChainId = strconv.Itoa(chainId)
+	for i := 0; i < initInfo.NodeCNT; i++ {
+		//NodeHashPath := filepath.Join("./test_output",initInfo.OrgIDs[i],"node","common1.nodeid")
+
+	}
 
 	return nil
 }

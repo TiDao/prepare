@@ -21,12 +21,12 @@ func main(){
 	//get init info
 	initInfo := getInfo()
 
-	if err := generate_certs("./test_output");err != nil{
+	if err := generate_certs(initInfo,"./test_output");err != nil{
 		log.Fatal(err)
 	}
 
 
-
+	log.Println(initInfo)
 	for i := 0;i < initInfo.NodeCNT; i++ {
 		err := generate_config(initInfo,i)
 		if err != nil{

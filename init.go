@@ -77,7 +77,7 @@ GetLogLevel:
 getConsensus:
 	for {
 		var consensusType string
-		fmt.Printf("input consensus type (0-SOLO,1-TBFT(default),3-HOTSTUFF,4-RAFT,5-DPOS): ")
+		fmt.Printf("input consensus type [0-SOLO,1-TBFT,3-HOTSTUFF,4-RAFT,5-DPOS,default: 1]: ")
 		fmt.Scanln(&consensusType)
 		switch consensusType {
 		case "0":
@@ -100,10 +100,11 @@ getConsensus:
 			initInfo.ConsensusType = 5
 			break getConsensus
 		case "" :
+			initInfo.ConsensusType = 1
 			break getConsensus
 		default:
 			//fmt.Printf(consensusType)
-			fmt.Printf("%s not in (0-SOLO(default),1-TBFT,3-HOTSTUFF,4-RAFT,5-DPOS),please input again.\n", consensusType)
+			fmt.Printf("%s not in [0-SOLO,1-TBFT,3-HOTSTUFF,4-RAFT,5-DPOS],please input again.\n", consensusType)
 			continue
 		}
 	}
@@ -173,43 +174,44 @@ getRpcPort:
 	}
 getNodeCNT:
 	for {
-		var CNT int
-		fmt.Printf("input node count number[1,4,7,10,13,defautl:4],: ")
+		var CNT string
+		fmt.Printf("input node count number[1,4,7,10,13,defautl:4]: ")
 		fmt.Scanln(&CNT)
 		switch CNT {
-		case 1:
-			initInfo.NodeCNT = CNT
+		case "1":
+			initInfo.NodeCNT = 1
 			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
 				cryptogen.CryptoConfig.Item[i].Count = 1
 			}
 			break getNodeCNT
-		case 4:
-			initInfo.NodeCNT = CNT
+		case "4":
+			initInfo.NodeCNT = 4
 			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
 				cryptogen.CryptoConfig.Item[i].Count = 4
 			}
 			break getNodeCNT
-		case 7:
-			initInfo.NodeCNT = CNT
+		case "7":
+			initInfo.NodeCNT = 7
 			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
 				cryptogen.CryptoConfig.Item[i].Count = 7
 			}
 			break getNodeCNT
-		case 10:
-			initInfo.NodeCNT = CNT
+		case "10":
+			initInfo.NodeCNT = 10
 			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
 				cryptogen.CryptoConfig.Item[i].Count = 10
 			}
 			break getNodeCNT
-		case 13:
-			initInfo.NodeCNT = CNT
+		case "13":
+			initInfo.NodeCNT = 13
 			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
 				cryptogen.CryptoConfig.Item[i].Count = 13
 			}
 			break getNodeCNT
-		case 0:
+		case "":
+			initInfo.NodeCNT = 4
 			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
-				cryptogen.CryptoConfig.Item[i].Count = 1
+				cryptogen.CryptoConfig.Item[i].Count = 4
 			}
 			break getNodeCNT
 		default:
@@ -246,6 +248,13 @@ getChainCNT:
 	for i := 1;i <= initInfo.NodeCNT;i++{
 		orgId := "wx-org"+strconv.Itoa(i)+".chainmaker.org"
 		initInfo.OrgIDs = append(initInfo.OrgIDs,orgId)
+	}
+
+	if initInfo.ConsensusType == 0{
+		initInfo.ChainCNT = 1
+		initInfo.NodeCNT = 1
+		initInfo.OrgIDs = []string{"wx-org.chainmaker.org"}
+		return initInfo
 	}
 
 	return initInfo
