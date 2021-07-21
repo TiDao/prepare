@@ -26,7 +26,7 @@ func main(){
 	}
 
 
-	log.Println(initInfo)
+	//log.Println(initInfo)
 	for i := 0;i < initInfo.NodeCNT; i++ {
 		err := generate_config(initInfo,i)
 		if err != nil{

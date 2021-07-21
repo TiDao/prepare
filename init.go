@@ -1,9 +1,9 @@
 package main
 
 import (
+	"cryptogen"
 	"fmt"
 	"strconv"
-	"cryptogen"
 )
 
 type InitInfo struct {
@@ -26,8 +26,7 @@ func checkPort(port int, min int, max int) bool {
 	return false
 }
 
-func getInfo() *InitInfo{
-
+func getInfo() *InitInfo {
 	var initInfo = &InitInfo{
 		LogLevel:      "INFO",
 		ConsensusType: 1,
@@ -39,7 +38,6 @@ func getInfo() *InitInfo{
 		P2Port:        11300,
 		RpcPort:       12300,
 	}
-
 
 GetLogLevel:
 	for {
@@ -99,7 +97,7 @@ getConsensus:
 			//fmt.Printf(consensusType)
 			initInfo.ConsensusType = 5
 			break getConsensus
-		case "" :
+		case "":
 			initInfo.ConsensusType = 1
 			break getConsensus
 		default:
@@ -180,37 +178,37 @@ getNodeCNT:
 		switch CNT {
 		case "1":
 			initInfo.NodeCNT = 1
-			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++ {
 				cryptogen.CryptoConfig.Item[i].Count = 1
 			}
 			break getNodeCNT
 		case "4":
 			initInfo.NodeCNT = 4
-			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++ {
 				cryptogen.CryptoConfig.Item[i].Count = 4
 			}
 			break getNodeCNT
 		case "7":
 			initInfo.NodeCNT = 7
-			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++ {
 				cryptogen.CryptoConfig.Item[i].Count = 7
 			}
 			break getNodeCNT
 		case "10":
 			initInfo.NodeCNT = 10
-			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++ {
 				cryptogen.CryptoConfig.Item[i].Count = 10
 			}
 			break getNodeCNT
 		case "13":
 			initInfo.NodeCNT = 13
-			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++ {
 				cryptogen.CryptoConfig.Item[i].Count = 13
 			}
 			break getNodeCNT
 		case "":
 			initInfo.NodeCNT = 4
-			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++{
+			for i := 0; i < len(cryptogen.CryptoConfig.Item); i++ {
 				cryptogen.CryptoConfig.Item[i].Count = 4
 			}
 			break getNodeCNT
@@ -245,12 +243,12 @@ getChainCNT:
 		}
 	}
 
-	for i := 1;i <= initInfo.NodeCNT;i++{
-		orgId := "wx-org"+strconv.Itoa(i)+".chainmaker.org"
-		initInfo.OrgIDs = append(initInfo.OrgIDs,orgId)
+	for i := 1; i <= initInfo.NodeCNT; i++ {
+		orgId := "wx-org" + strconv.Itoa(i) + ".chainmaker.org"
+		initInfo.OrgIDs = append(initInfo.OrgIDs, orgId)
 	}
 
-	if initInfo.ConsensusType == 0{
+	if initInfo.ConsensusType == 0 {
 		initInfo.ChainCNT = 1
 		initInfo.NodeCNT = 1
 		initInfo.OrgIDs = []string{"wx-org.chainmaker.org"}

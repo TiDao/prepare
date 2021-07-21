@@ -106,7 +106,7 @@ func generate_genesis(initInfo *InitInfo, node int) error {
 		fileTemplate = filepath.Join("./config", "bc_10_13.yml")
 	}
 
-	for i := 1; i <= initInfo.ChainCNT; i++ {
+	for j := 1; j <= initInfo.ChainCNT; j++ {
 		config := &localconf.ChainConfig{}
 		if err := config.ReadFile(fileTemplate); err != nil {
 			return err
@@ -139,11 +139,19 @@ func generate_genesis(initInfo *InitInfo, node int) error {
 		default:
 			break
 		}
-	}
+		for i := 0; i < initInfo.NodeCNT; i++ {
+			NodeHashPath := filepath.Join("./test_output", initInfo.OrgIDs[i], "node", "common1.nodeid")
+			NodeHash,err := ioutil.ReadFile(NodeHashPath)
+			if err != nil{
+				return err
+			}
 
-	for i := 0; i < initInfo.NodeCNT; i++ {
-		//NodeHashPath := filepath.Join("./test_output",initInfo.OrgIDs[i],"node","common1.nodeid")
-
+			//生成key value 对象，append config.Consensus.Nodes etc...
+			config.Consensus.Nodes[i].OrgId = initInfo.OrgIDs[i]
+			config.Consensus.Nodes[i].NodeId = []string{string(NodeHash)}
+			for i
+			config.Consensus.DposConfig[i].Key = 
+		}
 	}
 
 	return nil
