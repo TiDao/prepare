@@ -70,19 +70,19 @@ consensus:
       value: chain01_ext11
   dpos_config: # DPoS
   #ERC20合约配置
-    - key: erc20.total
-      value: "{erc20_total}"
-    - key: erc20.owner
-      value: "{org1_peeraddr}"
+  #    - key: erc20.total
+  #      value: "{erc20_total}"
+  #    - key: erc20.owner
+  #      value: "{org1_peeraddr}"
     - key: erc20.decimals
       value: "18"
-    - key: erc20.account:SYSTEM_CONTRACT_DPOS_STAKE
-      value: "{erc20_total}"
+  #    - key: erc20.account:SYSTEM_CONTRACT_DPOS_STAKE
+  #      value: "{erc20_total}"
   #Stake合约配置
     - key: stake.minSelfDelegation
       value: "2500000"
-    - key: stake.epochValidatorNum
-      value: "{epochValidatorNum}"
+      #    - key: stake.epochValidatorNum
+      #      value: "{epochValidatorNum}"
     - key: stake.epochBlockNum
       value: "10"
     - key: stake.completionUnbondingEpochNum

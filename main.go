@@ -7,7 +7,7 @@ import(
 	//"localconf"
 )
 
-
+const outputDir = "./test_output/chainmaker"
 
 
 
@@ -21,7 +21,7 @@ func main(){
 	//get init info
 	initInfo := getInfo()
 
-	if err := generate_certs(initInfo,"./test_output");err != nil{
+	if err := generate_certs(initInfo);err != nil{
 		log.Fatal(err)
 	}
 
@@ -31,6 +31,13 @@ func main(){
 		err := generate_config(initInfo,i)
 		if err != nil{
 			log.Fatalf("generate config error: %v",err)
+		}
+	}
+
+	for i := 0;i < initInfo.NodeCNT; i++ {
+		err := generate_genesis(initInfo,i)
+		if err != nil{
+			log.Fatalf("generate genesis config error: %v",err)
 		}
 	}
 

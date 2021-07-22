@@ -49,17 +49,19 @@ func Generate() error {
 			//userPath := filepath.Join(outputDir, orgName, "user")
 			//nodePath := filepath.Join(outputDir, orgName, "node")
 
-			caPath := filepath.Join(OutputDir, orgName, "ca")
-			caKeyPath := filepath.Join(caPath, "ca.key")
-			caCertPath := filepath.Join(caPath, "ca.crt")
+			caPath := filepath.Join(OutputDir,"ca")
+			caKey := fmt.Sprintf("ca%d.key",i+1)
+			caCrt := fmt.Sprintf("ca%d.crt",i+1)
+			caKeyPath := filepath.Join(caPath, caKey)
+			caCertPath := filepath.Join(caPath, caCrt)
 			userPath := filepath.Join(OutputDir, orgName, "user")
 			nodePath := filepath.Join(OutputDir, orgName, "node")
 
 			caCN := fmt.Sprintf("ca.%s", orgName)
 			caSANS := append(item.CA.Specs.SANS, caCN)
-			if err := generateCA(caPath,
-				item.CA.Location.Country, item.CA.Location.Locality, item.CA.Location.Province, "root-cert", orgName, caCN,
-				item.CA.Specs.ExpireYear, caSANS, keyType, hashType); err != nil {
+			if err := generateCA(caPath,caKey,caCrt,
+			item.CA.Location.Country, item.CA.Location.Locality, item.CA.Location.Province, "root-cert", orgName, caCN,
+			item.CA.Specs.ExpireYear, caSANS, keyType, hashType); err != nil {
 				return err
 			}
 
@@ -92,13 +94,13 @@ func Generate() error {
 	return nil
 }
 
-func generateCA(path, c, l, p, ou, org, cn string, expireYear int32, sans []string, keyType crypto.KeyType, hashType crypto.HashType) error {
-	privKey, err := cert.CreatePrivKey(keyType, path, "ca.key")
+func generateCA(path,caKey,caCrt, c, l, p, ou, org, cn string, expireYear int32, sans []string, keyType crypto.KeyType, hashType crypto.HashType) error {
+	privKey, err := cert.CreatePrivKey(keyType, path, caKey)
 	if err != nil {
 		return err
 	}
 
-	return cert.CreateCACertificate(&cert.CACertificateConfig{PrivKey: privKey, HashType: hashType, CertPath: path, CertFileName: "ca.crt", Country: c, Locality: l, Province: p, OrganizationalUnit: ou, Organization: org, CommonName: cn, ExpireYear: expireYear, Sans: sans})
+	return cert.CreateCACertificate(&cert.CACertificateConfig{PrivKey: privKey, HashType: hashType, CertPath: path, CertFileName: caCrt, Country: c, Locality: l, Province: p, OrganizationalUnit: ou, Organization: org, CommonName: cn, ExpireYear: expireYear, Sans: sans})
 }
 
 func generateUser(path, name, caKeyPath, caCertPath string,

@@ -1,7 +1,9 @@
 package main
 
 import (
+	common "chainmaker.org/chainmaker-go/pb/protogo/common"
 	"cryptogen"
+	"fmt"
 	"io/ioutil"
 	"localconf"
 	"os"
@@ -9,7 +11,7 @@ import (
 	"strconv"
 )
 
-func generate_certs(initInfo *InitInfo, outputDir string) error {
+func generate_certs(initInfo *InitInfo) error {
 
 	cryptogen.OutputDir = outputDir
 
@@ -37,7 +39,7 @@ func generate_config(initInfo *InitInfo, node int) error {
 	if err := config.ReadFile("./config/log.yml"); err != nil {
 		return err
 	}
-	certsPath := "./test_output"
+	certsPath := outputDir
 
 	//config log
 	config.LogConfig.SystemLog.LogLevelDefault = initInfo.LogLevel
@@ -65,7 +67,7 @@ func generate_config(initInfo *InitInfo, node int) error {
 			return err
 		}
 
-		seed := filepath.Join("/dns4", "chainmaker-"+strconv.Itoa(i), "tcp", strconv.Itoa(initInfo.P2Port), "p2p", string(nodeHash))
+		seed := filepath.Join("/dns4", "chainmaker-"+strconv.Itoa(i+1), "tcp", strconv.Itoa(initInfo.P2Port), "p2p", string(nodeHash))
 
 		config.NetConfig.Seeds = append(config.NetConfig.Seeds, seed)
 	}
@@ -93,18 +95,18 @@ func generate_config(initInfo *InitInfo, node int) error {
 }
 
 func generate_genesis(initInfo *InitInfo, node int) error {
-	//certsDir := "./test_output"
 	var fileTemplate string
-	switch initInfo.NodeCNT {
-	case 1:
-		fileTemplate = filepath.Join("./config", "bc_solo.yml")
-	case 4 | 7:
-		fileTemplate = filepath.Join("./config", "bc_4_7.yml")
-	case 16:
-		fileTemplate = filepath.Join("./config", "bc_16.yml")
-	default:
-		fileTemplate = filepath.Join("./config", "bc_10_13.yml")
-	}
+	fileTemplate = filepath.Join("./config", "bc_template.yml")
+	//switch initInfo.NodeCNT {
+	//case 1:
+	//	fileTemplate = filepath.Join("./config", "bc_solo.yml")
+	//case 4 | 7:
+	//	fileTemplate = filepath.Join("./config", "bc_4_7.yml")
+	//case 16:
+	//	fileTemplate = filepath.Join("./config", "bc_16.yml")
+	//default:
+	//	fileTemplate = filepath.Join("./config", "bc_10_13.yml")
+	//}
 
 	for j := 1; j <= initInfo.ChainCNT; j++ {
 		config := &localconf.ChainConfig{}
@@ -112,7 +114,7 @@ func generate_genesis(initInfo *InitInfo, node int) error {
 			return err
 		}
 
-		config.ChainId = "chain" + strconv.Itoa(i)
+		config.ChainId = "chain" + strconv.Itoa(j)
 
 		switch initInfo.ConsensusType {
 		case 0:
@@ -133,24 +135,77 @@ func generate_genesis(initInfo *InitInfo, node int) error {
 		case 5:
 			//ConsensusType_DPOS
 			config.Consensus.Type = 5
+			totalValue := strconv.Itoa(initInfo.NodeCNT * 2500000)
+			nodeHashPath := filepath.Join(outputDir, initInfo.OrgIDs[0], "node", "common1.nodeid")
+			nodeHash, err := ioutil.ReadFile(nodeHashPath)
+			if err != nil {
+				return err
+			}
+			totalKeyValuePair := &common.KeyValuePair{
+				Key:   fmt.Sprintf("erc20.total"),
+				Value: totalValue,
+			}
+			ownerKeyValuePair := &common.KeyValuePair{
+				Key:   fmt.Sprintf("erc20.owner"),
+				Value: string(nodeHash),
+			}
+			accountKeyValuePair := &common.KeyValuePair{
+				Key:   fmt.Sprintf("erc20.account:SYSTEM_CONTRACT_DPOS_STAKE"),
+				Value: totalValue,
+			}
+			epochValidatorNumKeyValuePair := &common.KeyValuePair{
+				Key:   fmt.Sprintf("stake.epochValidatorNum"),
+				Value: strconv.Itoa(initInfo.NodeCNT),
+			}
+
+			config.Consensus.DposConfig = append(config.Consensus.DposConfig, totalKeyValuePair)
+			config.Consensus.DposConfig = append(config.Consensus.DposConfig, ownerKeyValuePair)
+			config.Consensus.DposConfig = append(config.Consensus.DposConfig, accountKeyValuePair)
+			config.Consensus.DposConfig = append(config.Consensus.DposConfig, epochValidatorNumKeyValuePair)
 		case 10:
 			//ConsensusType_POW
 			config.Consensus.Type = 10
 		default:
 			break
 		}
+
 		for i := 0; i < initInfo.NodeCNT; i++ {
-			NodeHashPath := filepath.Join("./test_output", initInfo.OrgIDs[i], "node", "common1.nodeid")
-			NodeHash,err := ioutil.ReadFile(NodeHashPath)
-			if err != nil{
+			nodeHashPath := filepath.Join(outputDir, initInfo.OrgIDs[i], "node", "common1.nodeid")
+			nodeHash, err := ioutil.ReadFile(nodeHashPath)
+			if err != nil {
 				return err
 			}
 
-			//生成key value 对象，append config.Consensus.Nodes etc...
-			config.Consensus.Nodes[i].OrgId = initInfo.OrgIDs[i]
-			config.Consensus.Nodes[i].NodeId = []string{string(NodeHash)}
-			for i
-			config.Consensus.DposConfig[i].Key = 
+			orgConfig := &localconf.OrgConfig{
+				OrgId:  initInfo.OrgIDs[i],
+				NodeId: []string{string(nodeHash)},
+			}
+			config.Consensus.Nodes = append(config.Consensus.Nodes, orgConfig)
+
+			candidateKeyValuePair := &common.KeyValuePair{
+				Key:   fmt.Sprintf("stake.candidate:\"{org%d_peeraddr}\"", i+1),
+				Value: "2500000",
+			}
+			config.Consensus.DposConfig = append(config.Consensus.DposConfig, candidateKeyValuePair)
+
+			nodeIDKeyValuePair := &common.KeyValuePair{
+				Key:   fmt.Sprintf("stake.nodeID:\"{org%d_peeraddr}\"", i+1),
+				Value: string(nodeHash),
+			}
+			config.Consensus.DposConfig = append(config.Consensus.DposConfig, nodeIDKeyValuePair)
+
+			trustRootConfig := &localconf.TrustRootConfig{
+				OrgId: initInfo.OrgIDs[i],
+				Root:  fmt.Sprintf("/home/heyue/ca/ca%d.crt", i+1),
+			}
+			config.TrustRoots = append(config.TrustRoots, trustRootConfig)
+
+		}
+
+		outputFile := filepath.Join(outputDir, initInfo.OrgIDs[node], "config", fmt.Sprintf("bc%d.yml", j))
+		err := config.WriteFile(outputFile, 0664)
+		if err != nil {
+			return err
 		}
 	}
 

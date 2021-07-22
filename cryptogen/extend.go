@@ -35,16 +35,23 @@ func extend() error {
 			keyType := crypto.AsymAlgoMap[strings.ToUpper(item.PKAlgo)]
 			hashType := crypto.HashAlgoMap[strings.ToUpper(item.SKIHash)]
 
-			caPath := filepath.Join(OutputDir, orgName, "ca")
-			caKeyPath := filepath.Join(caPath, "ca.key")
-			caCertPath := filepath.Join(caPath, "ca.crt")
+			//caPath := filepath.Join(OutputDir, orgName, "ca")
+			//caKeyPath := filepath.Join(caPath, "ca.key")
+			//caCertPath := filepath.Join(caPath, "ca.crt")
+			//userPath := filepath.Join(OutputDir, orgName, "user")
+			caPath := filepath.Join(OutputDir,"ca")
+			caKey := fmt.Sprintf("ca%d.key",i+1)
+			caCrt := fmt.Sprintf("ca%d.crt",i+1)
+			caKeyPath := filepath.Join(caPath, caKey)
+			caCertPath := filepath.Join(caPath, caCrt)
 			userPath := filepath.Join(OutputDir, orgName, "user")
 			nodePath := filepath.Join(OutputDir, orgName, "node")
+
 
 			if _, err := os.Stat(caPath); os.IsNotExist(err) {
 				caCN := fmt.Sprintf("ca.%s", orgName)
 				caSANS := append(item.CA.Specs.SANS, caCN)
-				if err := generateCA(caPath,
+				if err := generateCA(caPath,caKey,caCrt,
 					item.CA.Location.Country, item.CA.Location.Locality, item.CA.Location.Province, "root-cert", orgName, caCN,
 					item.CA.Specs.ExpireYear, caSANS, keyType, hashType); err != nil {
 					return err
