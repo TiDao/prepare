@@ -6,7 +6,6 @@
 #
 
 log:
-  config_file: /home/heyue/log.yml          # config file of logger configuration.
 
 blockchain:
 #  - chainId: chain1
@@ -23,7 +22,7 @@ node:
   type:              full
   org_id:            wx-org2.chainmaker.org
   priv_key_file:     /home/heyue/node/consensus1.sign.key
-  cert_file:         /home/heyue/node/consensus1.sing.crt
+  cert_file:         /home/heyue/node/consensus1.sign.crt
   signer_cache_size: 1000
   cert_cache_size:   1000
   pkcs11:
@@ -92,8 +91,8 @@ rpc:
     #mode: disable
     #mode: oneway
     mode:           twoway
-    priv_key_file:  /home/heyue/consensus1.tls.key
-    cert_file:      /home/heyue/consensus1.tls.crt
+    priv_key_file:  /home/heyue/node/consensus1.tls.key
+    cert_file:      /home/heyue/node/consensus1.tls.crt
 
 monitor:
   enabled: true

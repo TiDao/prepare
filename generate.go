@@ -52,14 +52,17 @@ func generate_config(initInfo *InitInfo, node int) error {
 	for i := 1; i <= initInfo.ChainCNT; i++ {
 		blockChainItem := localconf.BlockchainConfig{
 			ChainId: "chain" + strconv.Itoa(i),
-			Genesis: "/home/heyue/config" + "bc" + strconv.Itoa(i) + ".yml",
+			Genesis: "/home/heyue/config" + "/bc" + strconv.Itoa(i) + ".yml",
 		}
 
-		blockChains := config.GetBlockChains()
-		blockChains = append(blockChains, blockChainItem)
+		config.BlockChainConfig = append(config.BlockChainConfig, blockChainItem)
 	}
+	
+	//config node
+	config.NodeConfig.OrgId = initInfo.OrgIDs[node]
 
 	//config p2p net
+	config.NetConfig.ListenAddr = "/ip4/0.0.0.0/tcp/"+strconv.Itoa(initInfo.P2Port)
 	for i, orgId := range initInfo.OrgIDs {
 		path := filepath.Join(certsPath, orgId, "node/common1.nodeid")
 		nodeHash, err := ioutil.ReadFile(path)

@@ -32,7 +32,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // ChainConfig
 type ChainConfig struct {
 	// blockchain identifier
-	ChainId string `protobuf:"bytes,1,opt,name=chain_id,json=chainId,proto3" json:"chain_id,omitempty" yaml:"chain_id,omitempty`
+	ChainId string `protobuf:"bytes,1,opt,name=chain_id,json=chainId,proto3" json:"chain_id,omitempty" yaml:"chain_id,omitempty"`
 	// blockchain version
 	Version string `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty" yaml:"version,omitempty"`
 	// authentication type
@@ -50,7 +50,7 @@ type ChainConfig struct {
 	// trusted root related configuration
 	// for alliance members, the initial member's root info of the consortium; for public chain, there is no need to configure
 	// Key: node_id; value: address, node public key / CA certificate
-	TrustRoots []*TrustRootConfig `protobuf:"bytes,9,rep,name=trust_roots,json=trustRoots,proto3" json:"trust_roots,omitempty" yaml:'trust_roots,omitempty'`
+	TrustRoots []*TrustRootConfig `protobuf:"bytes,9,rep,name=trust_roots,json=trustRoots,proto3" json:"trust_roots,omitempty" yaml:"trust_roots,omitempty"`
 	// permission related configuration
 	ResourcePolicies []*ResourcePolicy `protobuf:"bytes,10,rep,name=resource_policies,json=resourcePolicies,proto3" json:"resource_policies,omitempty" yaml:"resource_policies,omitempty`
 	Contract         *ContractConfig   `protobuf:"bytes,11,opt,name=contract,proto3" json:"contract,omitempty" yaml:"contract,omitempty"`
