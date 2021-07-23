@@ -1,0 +1,13 @@
+kubectl -n test delete configmaps chainmaker-1-config 
+kubectl -n test delete configmaps chainmaker-2-config 
+kubectl -n test delete configmaps chainmaker-3-config 
+kubectl -n test delete configmaps chainmaker-4-config 
+kubectl -n test delete secrets  chainmaker-ca 
+kubectl	-n test delete secrets  chainmaker-1-node 
+kubectl	-n test delete secrets  chainmaker-2-node 
+kubectl	-n test delete secrets  chainmaker-3-node 
+kubectl	-n test delete secrets  chainmaker-4-node 
+kubectl	-n test delete secrets  chainmaker-1-user 
+kubectl	-n test delete secrets  chainmaker-2-user 
+kubectl	-n test delete secrets  chainmaker-3-user 
+kubectl	-n test delete secrets  chainmaker-4-user 

@@ -17,6 +17,7 @@ type InitInfo struct {
 	P2Port        int
 	RpcPort       int
 	OrgIDs        []string
+	DomainName    string
 }
 
 func checkPort(port int, min int, max int) bool {
@@ -37,6 +38,7 @@ func getInfo() *InitInfo {
 		TrustedPort:   13300,
 		P2Port:        11300,
 		RpcPort:       12300,
+		DomainName:    "test.cluster.local",
 	}
 
 GetLogLevel:

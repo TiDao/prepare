@@ -7,7 +7,7 @@ import(
 	//"localconf"
 )
 
-const outputDir = "./test_output/chainmaker"
+const outputDir = "./output/chainmaker"
 
 
 
@@ -20,6 +20,7 @@ func main(){
 
 	//get init info
 	initInfo := getInfo()
+	initInfo.DomainName = "test.svc.cluster.local"
 
 	if err := generate_certs(initInfo);err != nil{
 		log.Fatal(err)

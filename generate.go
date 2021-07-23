@@ -64,13 +64,13 @@ func generate_config(initInfo *InitInfo, node int) error {
 	//config p2p net
 	config.NetConfig.ListenAddr = "/ip4/0.0.0.0/tcp/"+strconv.Itoa(initInfo.P2Port)
 	for i, orgId := range initInfo.OrgIDs {
-		path := filepath.Join(certsPath, orgId, "node/common1.nodeid")
+		path := filepath.Join(certsPath, orgId, "node/consensus1.nodeid")
 		nodeHash, err := ioutil.ReadFile(path)
 		if err != nil {
 			return err
 		}
 
-		seed := filepath.Join("/dns4", "chainmaker-"+strconv.Itoa(i+1), "tcp", strconv.Itoa(initInfo.P2Port), "p2p", string(nodeHash))
+		seed := filepath.Join("/dns4", "chainmaker-"+strconv.Itoa(i+1)+"."+initInfo.DomainName ,"tcp", strconv.Itoa(initInfo.P2Port), "p2p", string(nodeHash))
 
 		config.NetConfig.Seeds = append(config.NetConfig.Seeds, seed)
 	}
@@ -139,7 +139,7 @@ func generate_genesis(initInfo *InitInfo, node int) error {
 			//ConsensusType_DPOS
 			config.Consensus.Type = 5
 			totalValue := strconv.Itoa(initInfo.NodeCNT * 2500000)
-			nodeHashPath := filepath.Join(outputDir, initInfo.OrgIDs[0], "node", "common1.nodeid")
+			nodeHashPath := filepath.Join(outputDir, initInfo.OrgIDs[0], "node", "consensus1.nodeid")
 			nodeHash, err := ioutil.ReadFile(nodeHashPath)
 			if err != nil {
 				return err
