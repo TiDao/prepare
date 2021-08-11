@@ -7,21 +7,21 @@ import (
 )
 
 type InitInfo struct {
-	LogLevel      string
-	ConsensusType int
-	NodeCNT       int
-	ChainCNT      int
-	MonitorPort   int
-	PProfPort     int
-	TrustedPort   int
-	P2Port        int
-	RpcPort       int
-	OrgIDs        []string
-	DomainName    string
+	LogLevel      string `json:"logLevel,omitempty"`
+	ConsensusType int   `json:"consensusType,omitempty"`
+	NodeCNT       int  `json:"nodeCount,omitempty"`
+	ChainCNT      int `json:"chainCount,omitempty"`
+	MonitorPort   int 'json:"monitorPort,omitempty"'
+	PProfPort     int `json:"pprofPort,omitempty"`
+	TrustedPort   int `json:"trustedPort,omitempty"`
+	P2Port        int `json:"p2pPort,omitempty"`
+	RpcPort       int `json:"rpcPort,omitempty"`
+	OrgIDs        []string `json:"orgIDs"`
+	DomainName    string `json:"dommainName"`
 }
 
 func checkPort(port int, min int, max int) bool {
-	if port >= min && port <= max {
+	if (port >= min && port <= max) || port == 0 {
 		return true
 	}
 	return false

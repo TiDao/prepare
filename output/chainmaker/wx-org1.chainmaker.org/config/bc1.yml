@@ -1,0 +1,71 @@
+chain_id: chain1
+version: v1.2.0
+auth_type: identity
+sequence: 1
+crypto:
+  hash: SHA256
+block:
+  tx_timestamp_verify: true
+  tx_timeout: 600
+  block_tx_capacity: 100
+  block_size: 10
+  block_interval: 2000
+core:
+  tx_scheduler_timeout: 10
+  tx_scheduler_validate_timeout: 10
+consensus:
+  type: 1
+  nodes:
+  - org_id: wx-org1.chainmaker.org
+    node_id:
+    - QmYeTY92JSRJMzUJJifBcwSaeAiRfivTkiVkfBin2mgNxP
+  - org_id: wx-org2.chainmaker.org
+    node_id:
+    - QmXNvB2h47bm1HbWzTGjcSTwt5rAYAk9ZBsW7NMSfjncge
+  - org_id: wx-org3.chainmaker.org
+    node_id:
+    - QmXRwGQJUujcWGM8WLe5fbn892QAmHgcpKx6KGHDdLDCcJ
+  - org_id: wx-org4.chainmaker.org
+    node_id:
+    - QmUBQUWnA26d4em3G9ET1752rY7CfnEcqefUyvvgDBc3gw
+  ext_config:
+  - key: aa
+    value: chain01_ext11
+  dpos_config:
+  - key: erc20.decimals
+    value: "18"
+  - key: stake.minSelfDelegation
+    value: "2500000"
+  - key: stake.epochBlockNum
+    value: "10"
+  - key: stake.completionUnbondingEpochNum
+    value: "1"
+  - key: stake.candidate:"{org1_peeraddr}"
+    value: "2500000"
+  - key: stake.nodeID:"{org1_peeraddr}"
+    value: QmYeTY92JSRJMzUJJifBcwSaeAiRfivTkiVkfBin2mgNxP
+  - key: stake.candidate:"{org2_peeraddr}"
+    value: "2500000"
+  - key: stake.nodeID:"{org2_peeraddr}"
+    value: QmXNvB2h47bm1HbWzTGjcSTwt5rAYAk9ZBsW7NMSfjncge
+  - key: stake.candidate:"{org3_peeraddr}"
+    value: "2500000"
+  - key: stake.nodeID:"{org3_peeraddr}"
+    value: QmXRwGQJUujcWGM8WLe5fbn892QAmHgcpKx6KGHDdLDCcJ
+  - key: stake.candidate:"{org4_peeraddr}"
+    value: "2500000"
+  - key: stake.nodeID:"{org4_peeraddr}"
+    value: QmUBQUWnA26d4em3G9ET1752rY7CfnEcqefUyvvgDBc3gw
+trust_roots:
+- org_id: wx-org1.chainmaker.org
+  root: /home/heyue/ca/ca1.crt
+- org_id: wx-org2.chainmaker.org
+  root: /home/heyue/ca/ca2.crt
+- org_id: wx-org3.chainmaker.org
+  root: /home/heyue/ca/ca3.crt
+- org_id: wx-org4.chainmaker.org
+  root: /home/heyue/ca/ca4.crt
+resourcepolicies: []
+contract: {}
+snapshot: {}
+scheduler: {}
