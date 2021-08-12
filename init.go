@@ -11,7 +11,7 @@ type InitInfo struct {
 	ConsensusType int   `json:"consensusType,omitempty"`
 	NodeCNT       int  `json:"nodeCount,omitempty"`
 	ChainCNT      int `json:"chainCount,omitempty"`
-	MonitorPort   int 'json:"monitorPort,omitempty"'
+	MonitorPort   int `json:"monitorPort,omitempty"`
 	PProfPort     int `json:"pprofPort,omitempty"`
 	TrustedPort   int `json:"trustedPort,omitempty"`
 	P2Port        int `json:"p2pPort,omitempty"`
@@ -20,12 +20,6 @@ type InitInfo struct {
 	DomainName    string `json:"dommainName"`
 }
 
-func checkPort(port int, min int, max int) bool {
-	if (port >= min && port <= max) || port == 0 {
-		return true
-	}
-	return false
-}
 
 func getInfo() *InitInfo {
 	var initInfo = &InitInfo{
@@ -238,6 +232,7 @@ getChainCNT:
 			initInfo.ChainCNT = CNT
 			break getChainCNT
 		case 0:
+			initInfo.ChainCNT = 1
 			break getChainCNT
 		default:
 			fmt.Printf("chain count should be 1 - 4")
