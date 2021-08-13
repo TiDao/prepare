@@ -10,19 +10,10 @@ import (
 	"context"
 )
 
-type ChainMakerType struct {
-	clientset             *kubernetes.Clientset
-	NodeName              string
-	NameSpace             string
-	Service               *corev1.Service
-	Deployment            *appsv1.Deployment
-	PersistentVolumeClaim *corev1.PersistentVolumeClaim
-	ConfigMaps            []*corev1.ConfigMap
-	Secrets               []*corev1.Secret
-}
+
 
 //the function be used where outside of kubernetes cluster
-func (chain *ChainMakerType) CMDClientset(path string) error {
+func (chain *ChainMakerType) clientsetCMD(path string) error {
 
 	config, err := clientcmd.BuildConfigFromFlags("", path)
 	if err != nil {
@@ -38,7 +29,7 @@ func (chain *ChainMakerType) CMDClientset(path string) error {
 }
 
 //use function be used where inside of kubernetes cluster
-func (chain *ChainMakerType) RestClientset() error {
+func (chain *ChainMakerType) clientsetRest() error {
 
 	config, err := rest.InClusterConfig()
 	if err != nil {
@@ -53,27 +44,6 @@ func (chain *ChainMakerType) RestClientset() error {
 	return nil
 }
 
-func (chain *ChainMakerType) NodeCreate() error{
-	err := &k8sError{}
-	err.secret = secretCreate(chain.Secrets)
-	err.configMap = configMapCreate(chain.ConfigMaps)
-	err.persistentVolumeClaim = persistVolumeClaimCreate(chain.PersistenVolumeClaim)
-	err.deployment = deploymentCreate(chain.Deployment)
-	err.service = serviceCreate(chain.Service)
-
-	return err
-}
-
-func (chain *ChainMakerType) NodeDelete() error{
-	err := &k8sError{}
-	err.secret = secretDelete(chain.Secrets)
-	err.configMap = configMapDelete(chain.ConfigMaps)
-	err.persistentVolumeClaim = persistVolumeClaimDelete(chain.PersistenVolumeClaim)
-	err.deployment = deploymentDelete(chain.Deployment)
-	err.service = serviceDelete(chain.Service)
-
-	return err
-}
 
 
 func secretCreate(secrets []*corev1.Secret) error {
