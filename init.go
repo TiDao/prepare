@@ -213,6 +213,7 @@ getNodeCNT:
 			continue
 		}
 	}
+
 getChainCNT:
 	for {
 		var CNT int
