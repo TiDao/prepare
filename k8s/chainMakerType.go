@@ -14,6 +14,7 @@ type ChainMakerType struct {
 	clientset             *kubernetes.Clientset
 	NodeName              string
 	NameSpace             string
+	Storage               int
 	Service               *corev1.Service
 	Deployment            *appsv1.Deployment
 	PersistentVolumeClaim *corev1.PersistentVolumeClaim
@@ -36,9 +37,9 @@ func NewChainMakerType(NodeName,NameSpace,path string) (*ChainMakerType,error){
 	}
 }
 
-//the function be used where outside of kubernetes cluster
 
 func (chain *ChainMakerType) NodeCreate() error{
+
 	err := &k8sError{}
 	err.secret = secretCreate(chain.Secrets)
 	err.configMap = configMapCreate(chain.ConfigMaps)
@@ -50,6 +51,7 @@ func (chain *ChainMakerType) NodeCreate() error{
 }
 
 func (chain *ChainMakerType) NodeDelete() error{
+
 	err := &k8sError{}
 	err.secret = secretDelete(chain.Secrets)
 	err.configMap = configMapDelete(chain.ConfigMaps)
