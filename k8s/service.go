@@ -47,8 +47,10 @@ const svcTemplate = `{
     }
 }`
 
-func initSVC(name string,namespace string) (*corev1.Secret, error) {
-	svc := &corev1.Secret
+func serviceInit(name string,namespace string) (*corev1.Secret, error) {
+
+	svc := &corev1.Service
+
 	err := json.Unmarshal([]byte(svcTemplate),svc)
 	if err != nil {
 		return nil,err

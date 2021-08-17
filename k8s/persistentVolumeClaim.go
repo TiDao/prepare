@@ -29,8 +29,10 @@ const pvcTemplate = `{
     }
 }`
 
-func initPVC(name string,namespace string,size string) (*corev1.PersistentVolumeClaim,error) {
+func persistentVolumeClaimInit(name string,namespace string,size string) (*corev1.PersistentVolumeClaim,error) {
+
 	pvc := &corev1.PersistentVolumeClaim{}
+
 	err := json.Unmarshal([]byte(pvcTempalte),&pvc)
 	if err != nil{
 		return nil,err
