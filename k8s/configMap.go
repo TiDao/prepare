@@ -3,6 +3,7 @@ package k8s
 import(
 	corev1 "k8s.io/api/core/v1"
 	"encoding/json"
+	"strings"
 )
 
 const configMapTemplate = `{

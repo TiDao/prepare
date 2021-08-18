@@ -1,13 +1,125 @@
 package k8s
 
-import(
+import (
+	"encoding/json"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
-	"encoding/json"
 	"path/filepath"
+	"path"
 	"strings"
+	//"fmt"
 )
 
+type volumeType string
+
+const (
+	volumeConfigMap volumeType = "configMap"
+	volumeSecret    volumeType = "secret"
+)
+
+
+func getNames(pathName string) []string{
+	var fileNames []string
+
+	files,_:=  filepath.Glob(filepath.Join(pathName,"*"))
+
+	for _,file := range files {
+		fileNames = append(fileNames,path.Base(file))
+	}
+	return fileNames
+}
+
+func deploymentInit(name, namespace,caPath,configPath,nodePath, userPath string) (*appsv1.Deployment, error) {
+
+	deployment := &appsv1.Deployment{}
+	err := json.Unmarshal([]byte(deploymentTemplate), deployment)
+	if err != nil {
+		return nil, err
+	}
+
+	configFileNames := getNames(configPath)
+	appendVolume(volumeConfigMap, name, configFileNames, deployment)
+	appendVolumeMount("/home/heyue/config", configFileNames, deployment)
+
+
+	caFileNames := getNames(caPath)
+	appendVolume(volumeSecret, name, caFileNames, deployment)
+	appendVolumeMount("/home/heyue/ca", caFileNames, deployment)
+
+	nodeFileNames := getNames(nodePath)
+	appendVolume(volumeSecret, name, nodeFileNames, deployment)
+	appendVolumeMount("/home/heyue/node", nodeFileNames, deployment)
+
+	userFileNames := getNames(userPath)
+	appendVolume(volumeSecret, name, userFileNames, deployment)
+	appendVolumeMount("/home/heyue/user", userFileNames, deployment)
+
+	deployment.ObjectMeta.Name = name
+	deployment.ObjectMeta.Namespace = namespace
+	deployment.Spec.Selector.MatchLabels["chainmaker"] = name
+	deployment.Spec.Template.ObjectMeta.Name = name
+	deployment.Spec.Template.ObjectMeta.Labels["chainmaker"] = name
+	for i,_ := range deployment.Spec.Template.Spec.Volumes{
+		if deployment.Spec.Template.Spec.Volumes[i].Name == "data-pvc" {
+			deployment.Spec.Template.Spec.Volumes[i].PersistentVolumeClaim.ClaimName = name
+		}
+	}
+
+	return deployment,nil
+}
+
+func appendVolume(Type volumeType, nodeName string, files []string, deployment *appsv1.Deployment) {
+
+	volume := corev1.Volume{}
+
+	for _, file := range files {
+
+		var volumeName string
+
+		nameSplits := strings.Split(file, ".")
+		if len(nameSplits) == 2 {
+			volumeName = nameSplits[0] + "-" + nameSplits[1]
+		} else {
+			volumeName = nameSplits[0] + "-" + nameSplits[1] + "-" + nameSplits[2]
+		}
+
+		switch Type {
+		case volumeConfigMap:
+			volume.ConfigMap = &corev1.ConfigMapVolumeSource{}
+			volume.Name = volumeName
+			volume.ConfigMap.Name = nodeName + "-" + volumeName
+		case volumeSecret:
+			volume.Secret = &corev1.SecretVolumeSource{}
+			volume.Name = volumeName
+			volume.Secret.SecretName = nodeName + "-" + volumeName
+		}
+
+		deployment.Spec.Template.Spec.Volumes = append(deployment.Spec.Template.Spec.Volumes, volume)
+	}
+}
+
+func appendVolumeMount(mountPath string, files []string, deployment *appsv1.Deployment) {
+
+	volumeMount := corev1.VolumeMount{}
+
+	for _, file := range files {
+
+		var volumeName string
+
+		nameSplits := strings.Split(file, ".")
+		if len(nameSplits) == 2 {
+			volumeName = nameSplits[0] + "-" + nameSplits[1]
+		} else {
+			volumeName = nameSplits[0] + "-" + nameSplits[1] + "-" + nameSplits[2]
+		}
+
+		volumeMount.Name = volumeName
+		volumeMount.MountPath = mountPath
+
+		deployment.Spec.Template.Spec.Containers[0].VolumeMounts = append(deployment.Spec.Template.Spec.Containers[0].VolumeMounts, volumeMount)
+	}
+
+}
 
 const deploymentTemplate = `{
     "apiVersion": "apps/v1",
@@ -55,7 +167,7 @@ const deploymentTemplate = `{
                         ],
                         "volumeMounts":[
 							{
-								"name": "data-pvc"
+								"name": "data-pvc",
 								"mountPath": "/home/heyue/data"
 							}
 						]
@@ -73,101 +185,4 @@ const deploymentTemplate = `{
         }
     }
 }`
-
-type volumeType string
-
-const (
-	volumeConfigMap volumeType = "configMap"
-	volumeSecret    volumeType = "secret"
-)
-
-
-func appendVolume(Type volumeType,nodeName string,files []string,deployment *appsv1.Deployment) {
-
-	volume := corev1.Volume{}
-
-	for _,file := range files{
-
-		var volumeName string
-
-		nameSplits := strings.Split(file,".")
-		if len(nameSplits) == 2{
-			volumeName = nameSplits[0] + "-" + nameSplits[1]
-		}else{
-			volumeName = nameSplits[0] + "-" + nameSplits[1] + "-" + nameSplits[2]
-		}
-
-		switch Type{
-		case volumeConfigMap:
-			volume.Name = volumeName
-			volume.VolumeSource.ConfigMap.Name = nodeName + "-" + volumeName
-		case volumeSecret:
-			volume.Name = volumeName
-			volume.VolumeSource.Secret.SecretName = nodeName + "-" + volumeName
-		}
-
-		deployment.Spec.Template.Spec.Volumes = append(deployment.Spec.Template.Spec.Volumes, volume)
-	}
-}
-
-func appendVolumeMount(mountPath string,files []string,deployment *appsv1.Deployment) {
-
-	volumeMount = corev1.VolumeMount{}
-
-	for _,file := range files{
-
-		var volumeName string
-
-		nameSplits := strings.Split(file,".")
-		if len(nameSplits) == 2{
-			volumeName = nameSplits[0] + "-" + nameSplits[1]
-		}else{
-			volumeName = nameSplits[0] + "-" + nameSplits[1] + "-" + nameSplits[2]
-		}
-
-		volumeMount.Name = volumeName
-		volumeMount.MountPath = mountPath
-
-		deployment.Sepc.Template.Spec.Containers[0].VolumeMOunts = append(deployment.Spec.Template.Spec.Containers[0].VolumeMounts,volumeMount)
-	}
-
-}
-
-func deploymentInit(name,namespace,configPath,caPath,nodePath,userPath string) (*appsv1.Deployment,error) {
-	deployment := &appsv1.Deployment{}
-	err := json.Unmarshal([]byte(deploymentTemplate),deployment)
-	if err != nil{
-		return nil,err
-	}
-
-	configFileNames,err := filepath.Glob(filepath.Join(configPath,"*"))
-	if err != nil {
-		return nil,err
-	}
-	appendVolume(volumeConfigMap,name,configFileNames,deployment)
-	appendVolumeMount("/home/heyue/config",configFileNames,deployment)
-
-
-	caFileNames,err := filepath.Glob(filepath.Join(caPath,"*"))
-	if err != nil {
-		return nil,err
-	}
-	appendVolume(volumeSecret,name,caFileNames,deployment)
-	appendVolume("/home/heyue/ca",caFileNames,deployment)
-
-	nodeFileNames,err := filepath.Glob(filepath.Join(nodePath,"*"))
-	if err != nil {
-		return nil,err
-	}
-	appendVolume(volumeSecret,name,nodeFileNames,deployment)
-	appendVolume("/home/heyue/node",nodeFileNames,deployment)
-
-	userFileNames,err := filepath.Glob(filepath.Join(userPath,"*"))
-	if err != nil {
-		return nil,err
-	}
-	appendVolume(volumeSecret,name,userFileNames,deployment)
-	appendVolume("/home/heyue/user",userFileNames,deployment)
-
-}
 
