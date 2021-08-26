@@ -29,19 +29,20 @@ const pvcTemplate = `{
     }
 }`
 
-func persistentVolumeClaimInit(name string,namespace string,size string) (*corev1.PersistentVolumeClaim,error) {
+func (chain *ChainMakerType)persistentVolumeClaimInit(size string) error {
 
 	pvc := &corev1.PersistentVolumeClaim{}
 
-	err := json.Unmarshal([]byte(pvcTempalte),&pvc)
+	err := json.Unmarshal([]byte(pvcTemplate),&pvc)
 	if err != nil{
-		return nil,err
+		return err
 	}
 
-	pvc.ObjectMeta.Name = name
-	pvc.ObjectMeta.Namespace = namespace
+	pvc.ObjectMeta.Name = chain.NodeName
+	pvc.ObjectMeta.Namespace = chain.NameSpace
 	pvc.Spec.Resources.Requests["storage"] = resource.MustParse(size)
-	pvc.Spec.Resuorces.Limit["storage"] = resource.MustParse(size)
+	pvc.Spec.Resources.Limits["storage"] = resource.MustParse(size)
 
-	return pvc,nil
+	chain.PersistentVolumeClaim = pvc
+	return nil
 }

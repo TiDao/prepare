@@ -29,43 +29,44 @@ func getNames(pathName string) []string{
 	return fileNames
 }
 
-func deploymentInit(name, namespace,caPath,configPath,nodePath, userPath string) (*appsv1.Deployment, error) {
+func (chain *ChainMakerType)deploymentInit(caPath,configPath,nodePath, userPath string) error {
 
 	deployment := &appsv1.Deployment{}
 	err := json.Unmarshal([]byte(deploymentTemplate), deployment)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	configFileNames := getNames(configPath)
-	appendVolume(volumeConfigMap, name, configFileNames, deployment)
+	appendVolume(volumeConfigMap, chain.NodeName, configFileNames, deployment)
 	appendVolumeMount("/home/heyue/config", configFileNames, deployment)
 
 
 	caFileNames := getNames(caPath)
-	appendVolume(volumeSecret, name, caFileNames, deployment)
+	appendVolume(volumeSecret, chain.NodeName, caFileNames, deployment)
 	appendVolumeMount("/home/heyue/ca", caFileNames, deployment)
 
 	nodeFileNames := getNames(nodePath)
-	appendVolume(volumeSecret, name, nodeFileNames, deployment)
+	appendVolume(volumeSecret, chain.NodeName, nodeFileNames, deployment)
 	appendVolumeMount("/home/heyue/node", nodeFileNames, deployment)
 
 	userFileNames := getNames(userPath)
-	appendVolume(volumeSecret, name, userFileNames, deployment)
+	appendVolume(volumeSecret, chain.NodeName, userFileNames, deployment)
 	appendVolumeMount("/home/heyue/user", userFileNames, deployment)
 
-	deployment.ObjectMeta.Name = name
-	deployment.ObjectMeta.Namespace = namespace
-	deployment.Spec.Selector.MatchLabels["chainmaker"] = name
-	deployment.Spec.Template.ObjectMeta.Name = name
-	deployment.Spec.Template.ObjectMeta.Labels["chainmaker"] = name
+	deployment.ObjectMeta.Name = chain.NodeName
+	deployment.ObjectMeta.Namespace = chain.NameSpace
+	deployment.Spec.Selector.MatchLabels["chainmaker"] = chain.NodeName
+	deployment.Spec.Template.ObjectMeta.Name = chain.NodeName
+	deployment.Spec.Template.ObjectMeta.Labels["chainmaker"] = chain.NodeName
 	for i,_ := range deployment.Spec.Template.Spec.Volumes{
 		if deployment.Spec.Template.Spec.Volumes[i].Name == "data-pvc" {
-			deployment.Spec.Template.Spec.Volumes[i].PersistentVolumeClaim.ClaimName = name
+			deployment.Spec.Template.Spec.Volumes[i].PersistentVolumeClaim.ClaimName = chain.NodeName
 		}
 	}
 
-	return deployment,nil
+	chain.Deployment = deployment
+	return nil
 }
 
 func appendVolume(Type volumeType, nodeName string, files []string, deployment *appsv1.Deployment) {

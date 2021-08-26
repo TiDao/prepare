@@ -47,19 +47,20 @@ const svcTemplate = `{
     }
 }`
 
-func serviceInit(name string,namespace string) (*corev1.Secret, error) {
+func (chain *ChainMakerType)serviceInit() error {
 
-	svc := &corev1.Service
+	svc := &corev1.Service{}
 
 	err := json.Unmarshal([]byte(svcTemplate),svc)
 	if err != nil {
-		return nil,err
+		return err
 	}
 
-	svc.ObjectMeta.Name = name
-	svc.ObjectMeta.Namespace = namespace
-	svc.Spec.Selector["chainmaker"] =  name
+	svc.ObjectMeta.Name = chain.NodeName
+	svc.ObjectMeta.Namespace = chain.NameSpace
+	svc.Spec.Selector["chainmaker"] =  chain.NodeName
 
-	return svc,nil
+	chain.Service = svc
+	return nil
 }
 

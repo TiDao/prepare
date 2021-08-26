@@ -15,10 +15,14 @@ func showJson(v interface{}){
 }
 
 func TestDeploymentInit(t *testing.T){
-	deployment,err := deploymentInit("test","test","../output/chainmaker/ca","../output/chainmaker/wx-org1.chainmaker.org/config","../output/chainmaker/wx-org1.chainmaker.org/node","../output.chainmaker/wx-org1.chainmaker.org/user")
+	chain := &ChainMakerType{
+		NodeName: "test",
+		NameSpace: "test",
+	}
+	err := chain.deploymentInit("../output/chainmaker/ca","../output/chainmaker/wx-org1.chainmaker.org/config","../output/chainmaker/wx-org1.chainmaker.org/node","../output.chainmaker/wx-org1.chainmaker.org/user")
 	if err != nil{
 		t.Error(err)
 	}
 
-	showJson(deployment)
+	showJson(chain.Deployment)
 }
