@@ -4,27 +4,26 @@ import(
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"encoding/json"
+	"log"
 )
 
 const pvcTemplate = `{
-    "apiVersion": "v1",
-    "kind": "PersistentVolumeClaim",
+	"apiVesion": "v1",
+	"kind": "PersistentVolumeClaim",
     "metadata": {
         "name": "",
 		"namespace": ""
     },
     "spec": {
-        "resources": {
-            "requests": {
-				"storage": ""
-            },
-            "limits": {
-				"storage": ""
-            }
-        },
         "accessModes": [
             "ReadWriteMany"
         ],
+        "resources": {
+            "requests": {
+            },
+            "limits": {
+            }
+        },
         "storageClassName": "nfs"
     }
 }`
@@ -35,6 +34,7 @@ func (chain *ChainMakerType)persistentVolumeClaimInit(size string) error {
 
 	err := json.Unmarshal([]byte(pvcTemplate),&pvc)
 	if err != nil{
+		log.Println(pvc)
 		return err
 	}
 

@@ -5,6 +5,7 @@ import(
 	//b64 "encoding/base64"
 	"encoding/json"
 	"strings"
+	"log"
 )
 
 const secretTemplate = `{
@@ -14,7 +15,7 @@ const secretTemplate = `{
         "name": "",
 		"namespace": ""
     },
-    "type": "kubernetes.io/tls",
+    "type": "Opaque",
     "data": {
     }
 }`
@@ -37,6 +38,7 @@ func secretInit(nodeName,namespace string,fileName string,fileContent []byte) (*
 	secret.ObjectMeta.Name = nodeName + "-" + file
 	secret.ObjectMeta.Namespace = namespace
 	secret.Data[fileName] = fileContent
+	log.Println(fileName)
 
 	return secret,nil
 }

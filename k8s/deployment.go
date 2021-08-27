@@ -7,8 +7,73 @@ import (
 	"path/filepath"
 	"path"
 	"strings"
-	//"fmt"
 )
+
+const deploymentTemplate = `{
+	"apiVesion": "apps/v1",
+	"kind": "Deployment",
+    "metadata": {
+        "name": "chainmaker-1",
+        "namespace": "test"
+    },
+    "spec": {
+        "replicas": 1,
+        "selector": {
+            "matchLabels": {
+                "chainmaker": "chainmaker-1"
+            }
+        },
+        "template": {
+            "metadata": {
+                "name": "chainmaker-1",
+                "labels": {
+                    "chainmaker": "chainmaker-1"
+                }
+            },
+            "spec": {
+                "securityContext": {
+                    "runAsUser": 2021,
+                    "runAsGroup": 2021,
+                    "fsGroup": 2021
+                },
+                "imagePullSecrets": [
+                    {
+                        "name": "regcred"
+                    }
+                ],
+                "containers": [
+                    {
+                        "image": "registry.docker.heyue/chainmaker:v1.0.0",
+                        "name": "chainmaker",
+                        "command": [
+                            "/home/heyue/bin/chainmaker"
+                        ],
+                        "args": [
+                            "start",
+                            "-c",
+                            "/home/heyue/config/chainmaker.yml"
+                        ],
+                        "volumeMounts":[
+							{
+								"name": "data-pvc",
+								"mountPath": "/home/heyue/data"
+							}
+						]
+                    }
+                ],
+                "volumes": [
+                    {
+                       "name": "data-pvc",
+                       "persistentVolumeClaim": {
+                            "claimName": null
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}`
+
 
 type volumeType string
 
@@ -36,7 +101,6 @@ func (chain *ChainMakerType)deploymentInit(caPath,configPath,nodePath, userPath 
 	if err != nil {
 		return err
 	}
-
 	configFileNames := getNames(configPath)
 	appendVolume(volumeConfigMap, chain.NodeName, configFileNames, deployment)
 	appendVolumeMount("/home/heyue/config", configFileNames, deployment)
@@ -115,75 +179,10 @@ func appendVolumeMount(mountPath string, files []string, deployment *appsv1.Depl
 		}
 
 		volumeMount.Name = volumeName
-		volumeMount.MountPath = mountPath
+		volumeMount.MountPath = mountPath+file
 
 		deployment.Spec.Template.Spec.Containers[0].VolumeMounts = append(deployment.Spec.Template.Spec.Containers[0].VolumeMounts, volumeMount)
 	}
 
 }
-
-const deploymentTemplate = `{
-    "apiVersion": "apps/v1",
-    "kind": "Deployment",
-    "metadata": {
-        "name": "chainmaker-1",
-        "namespace": "test"
-    },
-    "spec": {
-        "replicas": 1,
-        "selector": {
-            "matchLabels": {
-                "chainmaker": "chainmaker-1"
-            }
-        },
-        "template": {
-            "metadata": {
-                "name": "chainmaker-1",
-                "labels": {
-                    "chainmaker": "chainmaker-1"
-                }
-            },
-            "spec": {
-                "securityContext": {
-                    "runAsUser": 2021,
-                    "runAsGroup": 2021,
-                    "fsGroup": 2021
-                },
-                "imagePullSecrets": [
-                    {
-                        "name": "regcred"
-                    }
-                ],
-                "containers": [
-                    {
-                        "image": "registry.docker.heyue/chainmaker:v1.0.0",
-                        "name": "chainmaker",
-                        "command": [
-                            "/home/heyue/bin/chainmaker"
-                        ],
-                        "args": [
-                            "start",
-                            "-c",
-                            "/home/heyue/config/chainmaker.yml"
-                        ],
-                        "volumeMounts":[
-							{
-								"name": "data-pvc",
-								"mountPath": "/home/heyue/data"
-							}
-						]
-                    }
-                ],
-                "volumes": [
-                    {
-                       "name": "data-pvc",
-                       "persistentVolumeClaim": {
-                            "claimName": null
-                        }
-                    }
-                ]
-            }
-        }
-    }
-}`
 

@@ -6,8 +6,8 @@ import(
 )
 
 const svcTemplate = `{
-    "apiVersion": "v1",
-    "kind": "Service",
+	"apiVersion": "v1",
+	"kind": "Service",
     "metadata": {
         "name": "",
         "namespace": ""

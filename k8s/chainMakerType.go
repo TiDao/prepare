@@ -8,6 +8,7 @@ import (
 	"path"
 	"path/filepath"
 	"io/ioutil"
+	b64 "encoding/base64"
 )
 
 type ChainMakerType struct {
@@ -53,11 +54,12 @@ func (chain *ChainMakerType) secretsInit(secretPath string) error{
 
 	for _,filePath := range filePaths{
 		data,err := ioutil.ReadFile(filePath)
+		dataBase64 :=  []byte(b64.StdEncoding.EncodeToString(data))
 		if err != nil{
 			return err
 		}
 		fileName := path.Base(filePath)
-		secret,err := secretInit(chain.NodeName,chain.NameSpace,fileName,data)
+		secret,err := secretInit(chain.NodeName,chain.NameSpace,fileName,dataBase64)
 		if err != nil {
 			return err
 		}
@@ -92,7 +94,8 @@ func NewChainMakerType(clientConfigPath,nodeName,nameSpace string,storageSize st
 
 	chainMaker.serviceInit()
 
-	chainMaker.persistentVolumeClaimInit("")
+	chainMaker.persistentVolumeClaimInit(storageSize + "Gi")
+	chainMaker.deploymentInit(caPath,configPath,nodePath,userPath)
 
 	return chainMaker,nil
 }
