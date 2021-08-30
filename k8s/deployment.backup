@@ -45,13 +45,16 @@ const deploymentTemplate = `{
                     {
                         "image": "registry.docker.heyue/chainmaker:v1.0.0",
                         "name": "chainmaker",
-						"command": [
-                            "/home/heyue/bin/chainmaker"
-                        ],
+						#"command": [
+                        #    "/home/heyue/bin/chainmaker"
+                        #],
+                        #"args": [
+                        #    "start",
+                        #    "-c",
+                        #    "/home/heyue/config/chainmaker.yml"
+                        #],
                         "args": [
-                            "start",
-                            "-c",
-                            "/home/heyue/config/chainmaker.yml"
+							"sleep 99999"
                         ],
                         "volumeMounts":[
 							{
@@ -180,7 +183,6 @@ func appendVolumeMount(mountPath string, files []string, deployment *appsv1.Depl
 
 		volumeMount.Name = volumeName
 		volumeMount.MountPath = filepath.Join(mountPath,file)
-		volumeMount.SubPath = file
 
 		deployment.Spec.Template.Spec.Containers[0].VolumeMounts = append(deployment.Spec.Template.Spec.Containers[0].VolumeMounts, volumeMount)
 	}

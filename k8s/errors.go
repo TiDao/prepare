@@ -13,6 +13,6 @@ type k8sError struct {
 }
 
 func (e *k8sError) Error() string{
-	return fmt.Sprintf("secret: %v\nconfigMap: %v\npersistentVolumeClaim: %v\ndeployment: %v\nservice: %v\n",e.secret,e.configMap,e.persistentVolumeClaim,e.deployment,e.service)
+	return fmt.Sprintf("\nsecret: %v\nconfigMap: %v\npersistentVolumeClaim: %v\ndeployment: %v\nservice: %v\n",e.secret,e.configMap,e.persistentVolumeClaim,e.deployment,e.service)
 }
 

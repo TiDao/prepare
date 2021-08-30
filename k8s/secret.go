@@ -5,7 +5,6 @@ import(
 	//b64 "encoding/base64"
 	"encoding/json"
 	"strings"
-	"log"
 )
 
 const secretTemplate = `{
@@ -38,7 +37,6 @@ func secretInit(nodeName,namespace string,fileName string,fileContent []byte) (*
 	secret.ObjectMeta.Name = nodeName + "-" + file
 	secret.ObjectMeta.Namespace = namespace
 	secret.Data[fileName] = fileContent
-	log.Println(fileName)
 
 	return secret,nil
 }

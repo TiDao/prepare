@@ -8,7 +8,7 @@ import (
 	"path"
 	"path/filepath"
 	"io/ioutil"
-	b64 "encoding/base64"
+	//b64 "encoding/base64"
 )
 
 type ChainMakerType struct {
@@ -54,7 +54,8 @@ func (chain *ChainMakerType) secretsInit(secretPath string) error{
 
 	for _,filePath := range filePaths{
 		data,err := ioutil.ReadFile(filePath)
-		dataBase64 :=  []byte(b64.StdEncoding.EncodeToString(data))
+		//dataBase64 :=  []byte(b64.StdEncoding.EncodeToString(data))
+		dataBase64 :=  data
 		if err != nil{
 			return err
 		}
@@ -104,23 +105,23 @@ func NewChainMakerType(clientConfigPath,nodeName,nameSpace string,storageSize st
 func (chain *ChainMakerType) NodeCreate() error{
 
 	err := &k8sError{}
-	err.secret = chain.secretCreate(chain.Secrets)
-	err.configMap = chain.configMapCreate(chain.ConfigMaps)
-	err.persistentVolumeClaim = chain.persistentVolumeClaimCreate(chain.PersistentVolumeClaim)
-	err.deployment = chain.deploymentCreate(chain.Deployment)
-	err.service = chain.serviceCreate(chain.Service)
+	err.secret = chain.secretCreate()
+	err.configMap = chain.configMapCreate()
+	err.persistentVolumeClaim = chain.persistentVolumeClaimCreate()
+	err.deployment = chain.deploymentCreate()
+	err.service = chain.serviceCreate()
 
 	return err
 }
 
-//func (chain *ChainMakerType) NodeDelete() error{
-//
-//	err := &k8sError{}
-//	err.secret = secretDelete(chain.Secrets.ObjectMeta.Name)
-//	err.configMap = configMapDelete(chain.ConfigMaps.ObjectMeta.Name)
-//	err.persistentVolumeClaim = persistentVolumeClaimDelete(chain.PersistentVolumeClaim.ObjectMeta.Name)
-//	err.deployment = deploymentDelete(chain.Deployment.ObjectMeta.Name)
-//	err.service = serviceDelete(chain.Service.ObjectMeta.Name)
-//
-//	return err
-//}
+func (chain *ChainMakerType) NodeDelete() error{
+
+	err := &k8sError{}
+	err.secret = chain.secretDelete()
+	err.configMap = chain.configMapDelete()
+	err.persistentVolumeClaim = chain.persistentVolumeClaimDelete()
+	err.deployment = chain.deploymentDelete()
+	err.service = chain.serviceDelete()
+
+	return err
+}
