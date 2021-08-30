@@ -74,8 +74,7 @@ getConsensus:
 		fmt.Printf("input consensus type [0-SOLO,1-TBFT,3-HOTSTUFF,4-RAFT,5-DPOS,default: 1]: ")
 		fmt.Scanln(&consensusType)
 		switch consensusType {
-		case "0":
-			//fmt.Printf(consensusType)
+		case "0": //fmt.Printf(consensusType)
 			initInfo.ConsensusType = 0
 			break getConsensus
 		case "1":
@@ -112,6 +111,7 @@ getMonitorPort:
 			initInfo.MonitorPort = port
 			break getMonitorPort
 		} else if port == 0 {
+			initInfo.MonitorPort = 14320
 			break getMonitorPort
 		}
 	}
@@ -125,6 +125,7 @@ getPProfPort:
 			initInfo.PProfPort = port
 			break getPProfPort
 		} else if port == 0 {
+			initInfo.PProfPort = 24330
 			break getPProfPort
 		}
 	}
@@ -138,6 +139,7 @@ getTrustedPort:
 			initInfo.TrustedPort = port
 			break getTrustedPort
 		} else if port == 0 {
+			initInfo.TrustedPort = 13300
 			break getTrustedPort
 		}
 	}
@@ -151,18 +153,20 @@ getP2Port:
 			initInfo.P2Port = port
 			break getP2Port
 		} else if port == 0 {
+			initInfo.P2Port = 11300
 			break getP2Port
 		}
 	}
 getRpcPort:
 	for {
 		var port int
-		fmt.Printf("input RPC Port[10000-60000,default:112300]:")
+		fmt.Printf("input RPC Port[10000-60000,default:12300]:")
 		fmt.Scanln(&port)
 		if checkPort(port, 10000, 60000) {
 			initInfo.RpcPort = port
 			break getRpcPort
 		} else if port == 0 {
+			initInfo.RpcPort = 12300
 			break getRpcPort
 		}
 	}
