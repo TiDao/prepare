@@ -7,19 +7,19 @@ import (
 )
 
 type InitInfo struct {
-	LogLevel      string `json:"logLevel,omitempty"`
-	ConsensusType int   `json:"consensusType,omitempty"`
-	NodeCNT       int  `json:"nodeCount,omitempty"`
-	ChainCNT      int `json:"chainCount,omitempty"`
-	MonitorPort   int `json:"monitorPort,omitempty"`
-	PProfPort     int `json:"pprofPort,omitempty"`
-	TrustedPort   int `json:"trustedPort,omitempty"`
-	P2Port        int `json:"p2pPort,omitempty"`
-	RpcPort       int `json:"rpcPort,omitempty"`
-	OrgIDs        []string `json:"orgIDs"`
-	DomainName    string `json:"dommainName"`
+	LogLevel       string   `json:"logLevel,omitempty"`
+	ConsensusType  int      `json:"consensusType,omitempty"`
+	NodeCNT        int      `json:"nodeCount,omitempty"`
+	ChainCNT       int      `json:"chainCount,omitempty"`
+	MonitorPort    int      `json:"monitorPort,omitempty"`
+	PProfPort      int      `json:"pprofPort,omitempty"`
+	TrustedPort    int      `json:"trustedPort,omitempty"`
+	P2Port         int      `json:"p2pPort,omitempty"`
+	RpcPort        int      `json:"rpcPort,omitempty"`
+	OrgIDs         []string `json:"orgIDs"`
+	DomainName     string   `json:"dommainName"`
+	NodeNamePrefix string   `json:"nodeNamePrefix"`
 }
-
 
 func getInfo() *InitInfo {
 	var initInfo = &InitInfo{
@@ -245,15 +245,29 @@ getChainCNT:
 		}
 	}
 
+getNodeNamePrefix:
+	for {
+		var name string
+		fmt.Printf("input Node name prefix[for example: wx-org(default)]: ")
+		fmt.Scanln(&name)
+		if name == "" {
+			initInfo.NodeNamePrefix = "wx-org"
+			break getNodeNamePrefix
+		} else {
+			initInfo.NodeNamePrefix = name
+			break getNodeNamePrefix
+		}
+	}
+
 	for i := 1; i <= initInfo.NodeCNT; i++ {
-		orgId := "wx-org" + strconv.Itoa(i) + ".chainmaker.org"
+		orgId := initInfo.NodeNamePrefix + strconv.Itoa(i) + "-chainmaker-org"
 		initInfo.OrgIDs = append(initInfo.OrgIDs, orgId)
 	}
 
 	if initInfo.ConsensusType == 0 {
 		initInfo.ChainCNT = 1
 		initInfo.NodeCNT = 1
-		initInfo.OrgIDs = []string{"wx-org.chainmaker.org"}
+		initInfo.OrgIDs = []string{"wx-org-chainmaker-org"}
 		return initInfo
 	}
 

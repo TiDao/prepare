@@ -20,14 +20,15 @@ func main(){
 
 	//get init info
 	initInfo := getInfo()
+
 	initInfo.DomainName = "test.svc.cluster.local"
+	//log.Println(initInfo)
 
 	if err := generate_certs(initInfo);err != nil{
 		log.Fatal(err)
 	}
 
 
-	//log.Println(initInfo)
 	for i := 0;i < initInfo.NodeCNT; i++ {
 		err := generate_config(initInfo,i)
 		if err != nil{

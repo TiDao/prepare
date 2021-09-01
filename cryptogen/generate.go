@@ -36,9 +36,9 @@ func Generate() error {
 
 	for _, item := range cryptoGenConfig.Item {
 		for i := 0; i < int(item.Count); i++ {
-			orgName := fmt.Sprintf("%s%d.%s", item.HostName, i+1, item.Domain)
+			orgName := fmt.Sprintf("%s%d-%s", item.HostName, i+1, item.Domain)
 			if item.Count == 1 {
-				orgName = fmt.Sprintf("%s.%s", item.HostName, item.Domain)
+				orgName = fmt.Sprintf("%s-%s", item.HostName, item.Domain)
 			}
 			keyType := crypto.AsymAlgoMap[strings.ToUpper(item.PKAlgo)]
 			hashType := crypto.HashAlgoMap[strings.ToUpper(item.SKIHash)]
