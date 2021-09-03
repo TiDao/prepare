@@ -21,7 +21,7 @@ type InitInfo struct {
 	NodeNamePrefix string   `json:"nodeNamePrefix"`
 }
 
-func getInfo() *InitInfo {
+func GetInfo() *InitInfo {
 	var initInfo = &InitInfo{
 		LogLevel:      "INFO",
 		ConsensusType: 1,
@@ -157,6 +157,7 @@ getP2Port:
 			break getP2Port
 		}
 	}
+
 getRpcPort:
 	for {
 		var port int
@@ -170,6 +171,7 @@ getRpcPort:
 			break getRpcPort
 		}
 	}
+
 getNodeCNT:
 	for {
 		var CNT string

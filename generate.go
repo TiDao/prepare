@@ -9,9 +9,10 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"command"
 )
 
-func generate_certs(initInfo *InitInfo) error {
+func generate_certs(initInfo *command.InitInfo) error {
 
 	cryptogen.OutputDir = outputDir
 
@@ -32,7 +33,7 @@ func generate_certs(initInfo *InitInfo) error {
 	return nil
 }
 
-func generate_config(initInfo *InitInfo, node int) error {
+func generate_config(initInfo *command.InitInfo, node int) error {
 
 	//read config files and get CMConfig object
 	config := &localconf.CMConfig{}
@@ -100,7 +101,7 @@ func generate_config(initInfo *InitInfo, node int) error {
 	return nil
 }
 
-func generate_genesis(initInfo *InitInfo, node int) error {
+func generate_genesis(initInfo *command.InitInfo, node int) error {
 	var fileTemplate string
 	fileTemplate = filepath.Join("./config", "bc_template.yml")
 	//switch initInfo.NodeCNT {

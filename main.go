@@ -4,22 +4,19 @@ import(
 	//"fmt"
 	"log"
 	"cryptogen"
+	"command"
 	//"localconf"
 )
 
 const outputDir = "./output/chainmaker"
 
-
-
-func main(){
+func commandMod() {
 	err := cryptogen.LoadCryptoGenConfig("./config/crypto_config_template.yml")
 	if err != nil{
 		log.Fatal(err)
 	}
-
-
 	//get init info
-	initInfo := getInfo()
+	initInfo := command.GetInfo()
 
 	initInfo.DomainName = "test.svc.cluster.local"
 	//log.Println(initInfo)
@@ -44,4 +41,10 @@ func main(){
 	}
 
 	//fmt.Println(initInfo)
+}
+
+
+
+func main(){
+	commandMod()
 }
