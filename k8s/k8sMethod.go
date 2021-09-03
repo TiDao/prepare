@@ -142,3 +142,17 @@ func (chain *ChainMakerType)serviceDelete() error{
 
 	return nil
 }
+
+func (chain *ChainMakerType)List() ([]string,error){
+	var serviceNames []string
+	services,err := chain.clientset.CoreV1().Services(chain.NameSpace).List(context.TODO(),metav1.ListOptions{})
+	if err != nil{
+		return nil,err
+	}
+
+	for _,service := range services.Items {
+		serviceNames = append(serviceNames,service.ObjectMeta.Name)
+	}
+
+	return serviceNames,nil
+}

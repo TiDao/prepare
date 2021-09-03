@@ -111,17 +111,48 @@ func (chain *ChainMakerType) NodeCreate() error{
 	err.deployment = chain.deploymentCreate()
 	err.service = chain.serviceCreate()
 
-	return err
+	if err.deployment != nil{
+		return err
+	}else if err.service != nil{
+		return err
+	}else if err.secret != nil{
+		return err
+	}else if err.configMap != nil{
+		return err
+	}else if err.persistentVolumeClaim != nil{
+		return err
+	}
+	return nil
 }
 
 func (chain *ChainMakerType) NodeDelete() error{
 
 	err := &k8sError{}
+	err.deployment = chain.deploymentDelete()
+	err.service = chain.serviceDelete()
 	err.secret = chain.secretDelete()
 	err.configMap = chain.configMapDelete()
 	err.persistentVolumeClaim = chain.persistentVolumeClaimDelete()
-	err.deployment = chain.deploymentDelete()
-	err.service = chain.serviceDelete()
 
-	return err
+	if err.deployment != nil{
+		return err
+	}else if err.service != nil{
+		return err
+	}else if err.secret != nil{
+		return err
+	}else if err.configMap != nil{
+		return err
+	}else if err.persistentVolumeClaim != nil{
+		return err
+	}
+	return nil
+}
+
+func (chain *ChainMakerType) NodeList() ([]string,error) {
+	list,err := chain.List()
+	if err != nil {
+		return nil,err
+	}
+
+	return list,nil
 }
