@@ -2,7 +2,7 @@ package k8s
 
 import (
 	//appsv1 "k8s.io/api/apps/v1"
-	//corev1 "k8s.io/api/core/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -143,15 +143,23 @@ func (chain *ChainMakerType)serviceDelete() error{
 	return nil
 }
 
-func (chain *ChainMakerType)List() ([]string,error){
-	var serviceNames []string
+func (chain *ChainMakerType)serviceGet() (*corev1.Service,error) {
+	service,err := chain.clientset.CoreV1().Services(chain.NameSpace).Get(context.TODO(),chain.Service.ObjectMeta.Name,metav1.GetOptions{}) 
+	if err != nil{
+		return nil,err
+	}
+	return service,nil
+}
+
+func (chain *ChainMakerType)serviceList() ([]corev1.Service,error){
+	var serviceNames []corev1.Service
 	services,err := chain.clientset.CoreV1().Services(chain.NameSpace).List(context.TODO(),metav1.ListOptions{})
 	if err != nil{
 		return nil,err
 	}
 
 	for _,service := range services.Items {
-		serviceNames = append(serviceNames,service.ObjectMeta.Name)
+		serviceNames = append(serviceNames,service)
 	}
 
 	return serviceNames,nil

@@ -148,8 +148,17 @@ func (chain *ChainMakerType) NodeDelete() error{
 	return nil
 }
 
-func (chain *ChainMakerType) NodeList() ([]string,error) {
-	list,err := chain.List()
+func (chain *ChainMakerType) NodeGet() (*corev1.Service,error) {
+	serivce,err := chain.serviceGet()
+	if err != nil{
+		return nil,err
+	}
+
+	return service,nil
+}
+
+func (chain *ChainMakerType) NodeList() ([]corev1.Service,error) {
+	list,err := chain.serviceList()
 	if err != nil {
 		return nil,err
 	}
