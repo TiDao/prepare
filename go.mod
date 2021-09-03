@@ -5,6 +5,7 @@ go 1.16
 require (
 	cryptogen v0.0.0
 	localconf v0.0.0
+	k8s     v0.0.0
 	chainmaker.org/chainmaker-go/pb/protogo v0.0.0
 )
 
@@ -15,4 +16,5 @@ replace (
 
 	cryptogen => ./cryptogen
 	localconf => ./localconf
+	k8s       => ./k8s
 )

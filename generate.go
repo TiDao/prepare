@@ -21,6 +21,9 @@ func generate_certs(initInfo *InitInfo) error {
 			cryptogen.CryptoConfig.Item[i].Count = 1
 		}
 	}
+	for i,_ := range cryptogen.CryptoConfig.Item{
+		cryptogen.CryptoConfig.Item[i].HostName = initInfo.NodeNamePrefix
+	}
 
 	if err := cryptogen.Generate(); err != nil {
 		return err
@@ -57,7 +60,7 @@ func generate_config(initInfo *InitInfo, node int) error {
 
 		config.BlockChainConfig = append(config.BlockChainConfig, blockChainItem)
 	}
-	
+
 	//config node
 	config.NodeConfig.OrgId = initInfo.OrgIDs[node]
 
@@ -70,7 +73,7 @@ func generate_config(initInfo *InitInfo, node int) error {
 			return err
 		}
 
-		seed := filepath.Join("/dns4", "chainmaker-"+strconv.Itoa(i+1)+"."+initInfo.DomainName ,"tcp", strconv.Itoa(initInfo.P2Port), "p2p", string(nodeHash))
+		seed := filepath.Join("/dns4", initInfo.OrgIDs[i] + "."+initInfo.DomainName ,"tcp", strconv.Itoa(initInfo.P2Port), "p2p", string(nodeHash))
 
 		config.NetConfig.Seeds = append(config.NetConfig.Seeds, seed)
 	}
