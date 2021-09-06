@@ -16,9 +16,10 @@ type InitInfo struct {
 	TrustedPort    int      `json:"trustedPort,omitempty"`
 	P2Port         int      `json:"p2pPort,omitempty"`
 	RpcPort        int      `json:"rpcPort,omitempty"`
-	OrgIDs         []string `json:"orgIDs"`
+	StorageSize    string   `json:"storageSize"`
 	DomainName     string   `json:"dommainName"`
 	NodeNamePrefix string   `json:"nodeNamePrefix"`
+	OrgIDs         []string
 }
 
 func GetInfo() *InitInfo {
@@ -107,7 +108,7 @@ getMonitorPort:
 		var port int
 		fmt.Printf("input Monitor Port[10000-60000,default:14320]:")
 		fmt.Scanln(&port)
-		if checkPort(port, 10000, 60000) {
+		if CheckPort(port, 10000, 60000) {
 			initInfo.MonitorPort = port
 			break getMonitorPort
 		} else if port == 0 {
@@ -121,7 +122,7 @@ getPProfPort:
 		var port int
 		fmt.Printf("input pprof Port[10000-60000,default:24330]:")
 		fmt.Scanln(&port)
-		if checkPort(port, 10000, 60000) {
+		if CheckPort(port, 10000, 60000) {
 			initInfo.PProfPort = port
 			break getPProfPort
 		} else if port == 0 {
@@ -135,7 +136,7 @@ getTrustedPort:
 		var port int
 		fmt.Printf("input trusted Port[10000-60000,default:13300]:")
 		fmt.Scanln(&port)
-		if checkPort(port, 10000, 60000) {
+		if CheckPort(port, 10000, 60000) {
 			initInfo.TrustedPort = port
 			break getTrustedPort
 		} else if port == 0 {
@@ -149,7 +150,7 @@ getP2Port:
 		var port int
 		fmt.Printf("input P2P Port[10000-60000,default:11300]:")
 		fmt.Scanln(&port)
-		if checkPort(port, 10000, 60000) {
+		if CheckPort(port, 10000, 60000) {
 			initInfo.P2Port = port
 			break getP2Port
 		} else if port == 0 {
@@ -163,7 +164,7 @@ getRpcPort:
 		var port int
 		fmt.Printf("input RPC Port[10000-60000,default:12300]:")
 		fmt.Scanln(&port)
-		if checkPort(port, 10000, 60000) {
+		if  CheckPort(port, 10000, 60000) {
 			initInfo.RpcPort = port
 			break getRpcPort
 		} else if port == 0 {

@@ -23,53 +23,6 @@ type ChainMakerType struct {
 	Secrets               []*corev1.Secret
 }
 
-func (chain *ChainMakerType) configMapsInit(configMapPath string) error {
-	filePaths,err := filepath.Glob(filepath.Join(configMapPath,"*"))
-	if err != nil{
-		return err
-	}
-
-	for _,filePath := range filePaths{
-		data,err := ioutil.ReadFile(filePath)
-		if err != nil{
-			return err
-		}
-		fileName := path.Base(filePath)
-		configMap,err := configMapInit(chain.NodeName,chain.NameSpace,fileName,data)
-		if err != nil {
-			return err
-		}
-
-		chain.ConfigMaps = append(chain.ConfigMaps,configMap)
-	}
-
-	return nil
-}
-
-func (chain *ChainMakerType) secretsInit(secretPath string) error{
-	filePaths,err := filepath.Glob(filepath.Join(secretPath,"*"))
-	if err != nil{
-		return err
-	}
-
-	for _,filePath := range filePaths{
-		data,err := ioutil.ReadFile(filePath)
-		//dataBase64 :=  []byte(b64.StdEncoding.EncodeToString(data))
-		dataBase64 :=  data
-		if err != nil{
-			return err
-		}
-		fileName := path.Base(filePath)
-		secret,err := secretInit(chain.NodeName,chain.NameSpace,fileName,dataBase64)
-		if err != nil {
-			return err
-		}
-
-		chain.Secrets = append(chain.Secrets,secret)
-	}
-
-	return nil
-}
 
 func NewChainMakerType(clientConfigPath,nodeName,nameSpace string,storageSize string,caPath,configPath,nodePath,userPath string) (*ChainMakerType,error){
 	chainMaker := &ChainMakerType{}
@@ -149,7 +102,7 @@ func (chain *ChainMakerType) NodeDelete() error{
 }
 
 func (chain *ChainMakerType) NodeGet() (*corev1.Service,error) {
-	serivce,err := chain.serviceGet()
+	service,err := chain.serviceGet()
 	if err != nil{
 		return nil,err
 	}
@@ -164,4 +117,52 @@ func (chain *ChainMakerType) NodeList() ([]corev1.Service,error) {
 	}
 
 	return list,nil
+}
+
+func (chain *ChainMakerType) configMapsInit(configMapPath string) error {
+	filePaths,err := filepath.Glob(filepath.Join(configMapPath,"*"))
+	if err != nil{
+		return err
+	}
+
+	for _,filePath := range filePaths{
+		data,err := ioutil.ReadFile(filePath)
+		if err != nil{
+			return err
+		}
+		fileName := path.Base(filePath)
+		configMap,err := configMapInit(chain.NodeName,chain.NameSpace,fileName,data)
+		if err != nil {
+			return err
+		}
+
+		chain.ConfigMaps = append(chain.ConfigMaps,configMap)
+	}
+
+	return nil
+}
+
+func (chain *ChainMakerType) secretsInit(secretPath string) error{
+	filePaths,err := filepath.Glob(filepath.Join(secretPath,"*"))
+	if err != nil{
+		return err
+	}
+
+	for _,filePath := range filePaths{
+		data,err := ioutil.ReadFile(filePath)
+		//dataBase64 :=  []byte(b64.StdEncoding.EncodeToString(data))
+		dataBase64 :=  data
+		if err != nil{
+			return err
+		}
+		fileName := path.Base(filePath)
+		secret,err := secretInit(chain.NodeName,chain.NameSpace,fileName,dataBase64)
+		if err != nil {
+			return err
+		}
+
+		chain.Secrets = append(chain.Secrets,secret)
+	}
+
+	return nil
 }

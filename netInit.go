@@ -1,4 +1,4 @@
-package httpnet
+package main
 
 import (
 	"cryptogen"
@@ -6,6 +6,7 @@ import (
 	"fmt"
 	//"net/http"
 	"strconv"
+	"command"
 )
 
 
@@ -16,16 +17,15 @@ func cryptogenCount(count int) {
 }
 
 func httpCheckPort(port *int,e *string,name string,min,max,defaultPort int){
-	if !checkPort(*port,min,max) {
-		*e = fmt.Sprintf("%s %d not in %d-%d,please input again\n",
-		name,*port,min,max)
+	if !command.CheckPort(*port,min,max) {
+		*e = fmt.Sprintf("%s %d not in %d-%d,please input again\n",name,*port,min,max)
 	}else if  *port == 0{
 		*port = defaultPort
 	}
 }
 
 //check log level
-func checkLogLevel(initInfo *InitInfo,e *InitError) {
+func checkLogLevel(initInfo *command.InitInfo,e *InitError) {
 	switch initInfo.LogLevel{
 	case "DEBUG":
 		return
@@ -42,7 +42,7 @@ func checkLogLevel(initInfo *InitInfo,e *InitError) {
 	}
 }
 
-func checkConsensusType(initInfo *InitInfo,e *InitError){
+func checkConsensusType(initInfo *command.InitInfo,e *InitError){
 	//check consensus type
 	switch initInfo.ConsensusType {
 	case 0:
@@ -60,7 +60,7 @@ func checkConsensusType(initInfo *InitInfo,e *InitError){
 	}
 }
 
-func checkNodeCNT(initInfo *InitInfo,e *InitError) {
+func checkNodeCNT(initInfo *command.InitInfo,e *InitError) {
 	switch initInfo.NodeCNT {
 	case 1:
 		cryptogenCount(1)
@@ -79,7 +79,7 @@ func checkNodeCNT(initInfo *InitInfo,e *InitError) {
 	}
 }
 
-func checkChainCNT(initInfo *InitInfo,e *InitError){
+func checkChainCNT(initInfo *command.InitInfo,e *InitError){
 	switch initInfo.ChainCNT {
 	case 1:
 		return
@@ -96,8 +96,14 @@ func checkChainCNT(initInfo *InitInfo,e *InitError){
 	}
 }
 
+func httpCheckNodeNamePrefix(initInfo *command.InitInfo,e *InitError) {
+	if initInfo.NodeNamePrefix == "" {
+		initInfo.NodeNamePrefix = "wx-org"
+	}
+}
+
 //check the request initInfo item 
-func httpCheckInfo(initInfo *InitInfo) error {
+func httpCheckInfo(initInfo *command.InitInfo) error {
 
 	//error clection
 	var e = &InitError{}
@@ -113,6 +119,9 @@ func httpCheckInfo(initInfo *InitInfo) error {
 
 	//check ChainCNT
 	checkChainCNT(initInfo,e)
+
+	//check NodeNamePrefix
+	httpCheckNodeNamePrefix(initInfo,e)
 
 	//check MonitorPort 
 	httpCheckPort(&initInfo.MonitorPort,&e.MonitorPort,"MonitorPort",10000,60000,14320)
@@ -131,7 +140,7 @@ func httpCheckInfo(initInfo *InitInfo) error {
 
 	//create ORG ID (for example: wx-org1.chainmaker.org ...etc) DomainName for each Node
 	for i:=1; i<=initInfo.NodeCNT;i++{
-		orgId := "wx-org"+ strconv.Itoa(i) + ".chainmaker.org"
+		orgId := "wx-org"+ strconv.Itoa(i) + "-chainmaker-org"
 		initInfo.OrgIDs = append(initInfo.OrgIDs,orgId)
 	}
 
@@ -144,10 +153,10 @@ func httpCheckInfo(initInfo *InitInfo) error {
 		initInfo.OrgIDs = []string{"wx-org.chainmaker.org"}
 	}
 
-	if e != nil{
-		return e
-	}else{
+	if e.checkError() {
 		return nil
+	}else{
+		return e
 	}
 
 }

@@ -5,12 +5,45 @@ import(
 	"log"
 	"cryptogen"
 	"command"
+	"flag"
+	"net/http"
 	//"localconf"
 )
 
-const outputDir = "./output/chainmaker"
+var outputDir string
+var commandFlag bool
 
-func commandMod() {
+
+
+func init(){
+	flag.BoolVar(&commandFlag,"-command",false,"使用命令行生成创建")
+	flag.StringVar(&outputDir,"-output","./output/chainmaker","配置和证书输出路径")
+}
+
+
+func main(){
+	flag.Parse()
+	if commandFlag {
+		commandModle()
+	}else{
+		serverModle()
+	}
+}
+
+func serverModle(){
+	http.HandleFunc("/create",CreateChain)
+	http.HandleFunc("/delete",DeleteChain)
+	//http.HandleFunc("/list",ListChain)
+
+
+	log.Println("start server and listen 0.0.0.0:10001")
+	err := http.ListenAndServe("0.0.0.0:10001",nil)
+	if err != nil{
+		log.Fatal(err)
+	}
+}
+
+func commandModle() {
 	err := cryptogen.LoadCryptoGenConfig("./config/crypto_config_template.yml")
 	if err != nil{
 		log.Fatal(err)
@@ -41,10 +74,4 @@ func commandMod() {
 	}
 
 	//fmt.Println(initInfo)
-}
-
-
-
-func main(){
-	commandMod()
 }
