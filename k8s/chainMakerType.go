@@ -8,6 +8,7 @@ import (
 	"path"
 	"path/filepath"
 	"io/ioutil"
+	//"log"
 	//b64 "encoding/base64"
 )
 
@@ -83,6 +84,7 @@ func (chain *ChainMakerType) NodeDelete() error{
 	err := &k8sError{}
 	err.deployment = chain.deploymentDelete()
 	err.service = chain.serviceDelete()
+
 	err.secret = chain.secretDelete()
 	err.configMap = chain.configMapDelete()
 	err.persistentVolumeClaim = chain.persistentVolumeClaimDelete()

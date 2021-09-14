@@ -36,6 +36,7 @@ func TestNodeDelete(t *testing.T){
 	chain2,_ := NewChainMakerType("/home/magatron/.kube/config","wx-org2-chainmaker-org","test","10","../output/chainmaker/ca","../output/chainmaker/wx-org2-chainmaker-org/config","../output/chainmaker/wx-org2-chainmaker-org/node","../output/chainmaker/wx-org2-chainmaker-org/user")
 	chain3,_ := NewChainMakerType("/home/magatron/.kube/config","wx-org3-chainmaker-org","test","10","../output/chainmaker/ca","../output/chainmaker/wx-org3-chainmaker-org/config","../output/chainmaker/wx-org3-chainmaker-org/node","../output/chainmaker/wx-org3-chainmaker-org/user")
 	chain4,_ := NewChainMakerType("/home/magatron/.kube/config","wx-org4-chainmaker-org","test","10","../output/chainmaker/ca","../output/chainmaker/wx-org4-chainmaker-org/config","../output/chainmaker/wx-org4-chainmaker-org/node","../output/chainmaker/wx-org4-chainmaker-org/user")
+
 	err := chain1.NodeDelete()
 	if err != nil{
 		t.Error(err)

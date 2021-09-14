@@ -17,7 +17,7 @@ type InitInfo struct {
 	P2Port         int      `json:"p2pPort,omitempty"`
 	RpcPort        int      `json:"rpcPort,omitempty"`
 	StorageSize    string   `json:"storageSize"`
-	DomainName     string   `json:"dommainName"`
+	DomainName     string   `json:"domainName"`
 	NodeNamePrefix string   `json:"nodeNamePrefix"`
 	OrgIDs         []string
 }
@@ -33,7 +33,7 @@ func GetInfo() *InitInfo {
 		TrustedPort:   13300,
 		P2Port:        11300,
 		RpcPort:       12300,
-		DomainName:    "test.cluster.local",
+		DomainName:    "test.svc.cluster.local",
 	}
 
 GetLogLevel:

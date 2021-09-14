@@ -18,9 +18,11 @@ func cryptogenCount(count int) {
 
 func httpCheckPort(port *int,e *string,name string,min,max,defaultPort int){
 	if !command.CheckPort(*port,min,max) {
-		*e = fmt.Sprintf("%s %d not in %d-%d,please input again\n",name,*port,min,max)
-	}else if  *port == 0{
-		*port = defaultPort
+		if *port == 0{
+			*port = defaultPort
+		}else{
+			*e = fmt.Sprintf("%s %d not in %d-%d,please input again\n",name,*port,min,max)
+		}
 	}
 }
 
@@ -140,7 +142,8 @@ func httpCheckInfo(initInfo *command.InitInfo) error {
 
 	//create ORG ID (for example: wx-org1.chainmaker.org ...etc) DomainName for each Node
 	for i:=1; i<=initInfo.NodeCNT;i++{
-		orgId := "wx-org"+ strconv.Itoa(i) + "-chainmaker-org"
+		//orgId := initInfo.NodeNamePrefix + strconv.Itoa(i) + "-chainmaker-org"
+		orgId := initInfo.NodeNamePrefix + strconv.Itoa(i)
 		initInfo.OrgIDs = append(initInfo.OrgIDs,orgId)
 	}
 
@@ -150,7 +153,8 @@ func httpCheckInfo(initInfo *command.InitInfo) error {
 	if initInfo.ConsensusType == 0{
 		initInfo.ChainCNT =1
 		initInfo.NodeCNT = 1
-		initInfo.OrgIDs = []string{"wx-org.chainmaker.org"}
+		//initInfo.OrgIDs = []string{initInfo.NodeNamePrefix + "-chainmaker-org"}
+		initInfo.OrgIDs = []string{initInfo.NodeNamePrefix}
 	}
 
 	if e.checkError() {

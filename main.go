@@ -16,8 +16,12 @@ var commandFlag bool
 
 
 func init(){
-	flag.BoolVar(&commandFlag,"-command",false,"使用命令行生成创建")
-	flag.StringVar(&outputDir,"-output","./output/chainmaker","配置和证书输出路径")
+	flag.BoolVar(&commandFlag,"c",false,"使用命令行生成创建")
+	flag.StringVar(&outputDir,"o","./output/chainmaker","配置和证书输出路径")
+	err := cryptogen.LoadCryptoGenConfig("./config/crypto_config_template.yml")
+	if err != nil{
+		log.Fatal(err)
+	}
 }
 
 
@@ -31,6 +35,8 @@ func main(){
 }
 
 func serverModle(){
+
+
 	http.HandleFunc("/create",CreateChain)
 	http.HandleFunc("/delete",DeleteChain)
 	//http.HandleFunc("/list",ListChain)
@@ -44,10 +50,6 @@ func serverModle(){
 }
 
 func commandModle() {
-	err := cryptogen.LoadCryptoGenConfig("./config/crypto_config_template.yml")
-	if err != nil{
-		log.Fatal(err)
-	}
 	//get init info
 	initInfo := command.GetInfo()
 

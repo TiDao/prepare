@@ -22,7 +22,7 @@ func CreateChain(w http.ResponseWriter,r *http.Request) {
 
 	generateChain(initInfo,&w)
 
-	chains,err :=  generateChainMakerType("/home/magatron/.kube/config",initInfo,"test","output")
+	chains,err :=  generateChainMakerType("/home/magatron/.kube/config",initInfo,"test",outputDir)
 	if err != nil{
 		log.Println(err)
 		fmt.Fprintf(w,"generate ChainMakerType error: %s",err.Error())
@@ -33,12 +33,16 @@ func CreateChain(w http.ResponseWriter,r *http.Request) {
 		if err := chain.NodeCreate();err != nil{
 			log.Println(err)
 			fmt.Fprintf(w,"create node error: %s",err.Error())
+		}else{
+			log.Printf("create node %v success\n",chain.NodeName)
+			fmt.Fprintf(w,"create %v node success\n",chain.NodeName)
 		}
 	}
 }
 
 func DeleteChain(w http.ResponseWriter,r *http.Request){
 
+	log.Println("delete chain starting")
 	initInfo := &command.InitInfo{}
 
 	if err := json.NewDecoder(r.Body).Decode(initInfo);err != nil{
@@ -47,17 +51,24 @@ func DeleteChain(w http.ResponseWriter,r *http.Request){
 		return
 	}
 
-	chains,err :=  generateChainMakerType("/home/magatron/.kube/config",initInfo,"test","output")
+	generateChain(initInfo,&w)
+
+	log.Println("starting generate chainmakertype")
+	chains,err :=  generateChainMakerType("/home/magatron/.kube/config",initInfo,"test",outputDir)
 	if err != nil{
 		log.Println(err)
 		fmt.Fprintf(w,"generate ChainMakerType error: %s",err.Error())
 		return
 	}
+	log.Println("finish generate chainmakertype")
 
 	for _,chain := range chains{
 		if err := chain.NodeDelete();err != nil{
 			log.Println(err)
-			fmt.Fprintf(w,"create node error: %s",err.Error())
+			fmt.Fprintf(w,"create node error: %s\n",err.Error())
+		}else{
+			log.Printf("delete node %v success\n",chain.NodeName)
+			fmt.Fprintf(w,"delete node %v success\n",chain.NodeName)
 		}
 	}
 }
